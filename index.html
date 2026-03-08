@@ -16,46 +16,69 @@ Do not remove. Digital ownership marker.
     <!-- МЕНЮ -->
     <div class="landing" id="landing">
         <!-- ENAMORADO_UNIQUE_SIGNATURE_2026_DO_NOT_REMOVE -->
-        <div class="landing-content">
+        <section class="hero">
+
             <h1 class="title">
                 ENAMORADO<br>DE UN SUEÑO
             </h1>
 
-            <p class="subtitle">
-                Ласкаво просимо туди, де мафія — це більше ніж гра...
-            </p>
+            <div class="about">
 
-            <button onclick="enterSite()" class="enter-btn">
-                УВІЙТИ
-            </button>
+                <h2>💌 Про чат</h2>
 
-            <div class="disclaimer">
+                <p>
+                    Цей чат створений для ігор у <strong>Мафію</strong>, спілкування та хорошого настрою 🎉
+                    Тут збираються люди, які люблять атмосферні ігри, інтриги та цікаві розмови.
+                </p>
 
+                <p>
+                    Головне правило нашої спільноти — <strong>участь, повага та позитивна атмосфера</strong> 🤍
+                </p>
+
+                <p>
+                    Перед участю обовʼязково ознайомтесь із правилами чату та гри 🤝
+                </p>
+
+                <p class="age">
+                    🔞 Рекомендований вік: 14+
+                </p>
+
+                <p class="link">
+                    🔗 Наш Telegram:
+                    <a href="https://t.me/+EIjCF_gOttpkZjhk" target="_blank">
+                        t.me/+EIjCF_gOttpkZjhk
+                    </a>
+                </p>
+
+            </div>
+
+            <div class="block legal">
                 ⚠️ Реєструючись та перебуваючи на сервері, ви автоматично погоджуєтесь із правилами чату та гри.
                 Адміністрація не несе відповідальності за незнання правил користувачем.
             </div>
-        </div>
+
+        </section>
     </div>
-    <div class="menu" id="menu">
+    <!--НАВІГАЦІЯ-->
+    <nav class="navbar">
 
-        <div class="card " onclick="openTab('events', this)">
-            <span>💀 Архів ліквідації</span>
-        </div>
+        <button class="nav-btn" onclick="openTab('events')">
+            💀 Архів Ліквідаії
+        </button>
 
-        <div class="card" onclick="openTab('rules', this)">
-            <span>📌 Правила Чату</span>
-        </div>
+        <button class="nav-btn" onclick="openTab('rules')">
+            📜 Правила Чату
+        </button>
 
-        <div class="card" onclick="openTab('game', this)">
-            <span>❌ Правила Гри</span>
-        </div>
+        <button class="nav-btn" onclick="openTab('game')">
+            ⚔️ Правила Гри
+        </button>
 
-        <div class="card" onclick="openTab('roles', this)">
-            <span>🕵️ Мафія - Ролі</span>
-        </div>
+        <button class="nav-btn" onclick="openTab('roles')">
+            🕵️ Ролі Мафія
+        </button>
 
-    </div>
-
+    </nav>
     <!-- ІВЕНТИ -->
     <div id="events" class="tab-content">
         <div class="container">

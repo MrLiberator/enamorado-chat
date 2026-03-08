@@ -6,22 +6,20 @@ document.addEventListener("dragstart", e => e.preventDefault());
            UI LOGIC
         ========================= */
 
-function openTab(tabId, el) {
-    const menu = document.getElementById("menu");
-
-    if (!menu.classList.contains("active")) {
-        menu.classList.add("active");
-    }
+function openTab(id) {
 
     document.querySelectorAll(".tab-content")
-        .forEach(t => t.classList.remove("active"));
+        .forEach(el => el.style.display = "none");
 
-    document.getElementById(tabId).classList.add("active");
+    const tab = document.getElementById(id);
 
-    document.querySelectorAll(".card")
-        .forEach(c => c.classList.remove("active"));
+    tab.style.display = "block";
 
-    el.classList.add("active");
+    window.scrollTo({
+        top: tab.offsetTop - 70,
+        behavior: "smooth"
+    });
+
 }
 
 const toggleDay = el => {
@@ -39,10 +37,6 @@ const toggleRule = el => {
 const toggleRole = el => {
     el.classList.toggle("active");
 };
-
-function enterSite() {
-    document.getElementById("landing").style.display = "none";
-}
 /*анті-школьнік-угон*/
 document.addEventListener("keydown", e => {
     if (

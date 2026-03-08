@@ -33,7 +33,6 @@ body {
     -webkit-tap-highlight-color: transparent;
     display: flex;
     flex-direction: column;
-    align-items: center;
     overflow-x: hidden;
 }
 
@@ -55,21 +54,11 @@ body {
 
 /* LANDING */
 .landing {
-    position: fixed;
-    inset: 0;
-    background: url('../assets/TGK_new.jpg') center / cover no-repeat;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 2000;
 }
-
-    .landing::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: rgba(0,0,0,.75);
-    }
 
 .landing-content {
     position: relative;
@@ -385,7 +374,67 @@ h1 {
     padding: 10px 15px;
     text-align: center;
 }
-
 .hero {
-    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 70px;
 }
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px;
+    background: rgba(8,8,12,.55);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    z-index: 1000;
+}
+.nav-btn {
+    background: rgba(25,25,35,.8);
+    color: #eaeaea;
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.05);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: .25s;
+}
+    .nav-btn:hover {
+        background: rgba(120,20,30,.6);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(200,50,50,.25);
+    }
+.about {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 25px;
+    background: rgba(10,10,15,.65);
+    backdrop-filter: blur(8px);
+    border-radius: 14px;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+    .about h2 {
+        margin-bottom: 10px;
+        color: var(--accent);
+    }
+
+    .about a {
+        color: #ff6a6a;
+        text-decoration: none;
+    }
+
+        .about a:hover {
+            text-decoration: underline;
+        }
