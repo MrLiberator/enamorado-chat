@@ -438,3 +438,12 @@ h1 {
         .about a:hover {
             text-decoration: underline;
         }
+.telegram-link a {
+    color: #ff5c5c;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+    .telegram-link a:hover {
+        text-decoration: underline;
+    }
