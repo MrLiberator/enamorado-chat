@@ -1,0 +1,22 @@
+{
+  "title": "Which admin are you most similar to?",
+  "questions": [
+    {
+      "question": "How do you behave during a game?",
+      "answers": [
+        {
+          "text": "I analyze everyone.",
+          "trait": "analytical"
+        },
+        {
+          "text": "I manipulate players.",
+          "trait": "charismatic"
+        },
+        {
+          "text": "I stay calm and observe.",
+          "trait": "calm"
+        }
+      ]
+    }
+  ]
+}

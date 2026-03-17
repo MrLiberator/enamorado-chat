@@ -1,0 +1,22 @@
+{
+  "title": "Which mafia role are you?",
+  "questions": [
+    {
+      "question": "What is your playstyle?",
+      "answers": [
+        {
+          "text": "Leader",
+          "role": "don"
+        },
+        {
+          "text": "Investigator",
+          "role": "detective"
+        },
+        {
+          "text": "Protector",
+          "role": "doctor"
+        }
+      ]
+    }
+  ]
+}
