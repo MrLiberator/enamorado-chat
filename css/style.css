@@ -1,5 +1,6 @@
 .event, .role, .rule {
     user-select: none;
+    padding: 16px;
 }
 * {
     box-sizing: border-box;
@@ -52,9 +53,9 @@ body {
         display: block;
     }
 .container {
-    max-width: 600px;
+    max-width: 1100px;
+    width: 95%;
     margin: auto;
-    padding: 15px;
 }
 .block,
 .weekday {
@@ -88,13 +89,14 @@ body {
 }
 .event {
     background: rgba(18, 25, 45, 0.85);
-    border-radius: 14px;
+    border-radius: 25px;
     padding: 14px;
     margin-top: 12px;
 }
 .event-header {
     font-size: 14px;
     font-weight: bold;
+    text-align: center;
 }
 .description {
     white-space: pre-line;
@@ -103,6 +105,7 @@ body {
     overflow: hidden;
     transition: .3s;
     color: #ffffff;
+    text-align: left;
 }
 .event.active .description {
     max-height: none;
@@ -140,6 +143,7 @@ body {
     transition: .3s;
     color: #ffffff;
     white-space: pre-line;
+    text-align: left;
 }
 .role.active .role-description {
     max-height: 500px;
