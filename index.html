@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--
 ENAMORADO_DE_UN_SUENO_OFFICIAL_SOURCE_2026
 Author: Enamorado Team
@@ -75,6 +75,10 @@ Do not remove. Digital ownership marker.
 
         <button class="nav-btn" onclick="openTab('roles')">
             🕵️ Ролі Мафія
+        </button>
+
+        <button class="nav-btn" onclick="openTab('tests')">
+            🧩 Тести
         </button>
 
     </nav>
@@ -1071,13 +1075,39 @@ Do not remove. Digital ownership marker.
             </div>
         </div>
     </div>
+    <!-- TESTS -->
+    <div id="tests" class="tab-content">
+        <div class="container">
+            <h1>🧩 Тести</h1>
+
+            <div class="block">
+                <button class="quiz-btn" id="quiz-start-admin" type="button">
+                    🕴️ Адмін тест
+                </button>
+                <button class="quiz-btn" id="quiz-start-role" type="button">
+                    🧩 Роль у мафії
+                </button>
+            </div>
+
+            <div id="quiz-screen" class="block" style="display:none;">
+                <div id="quiz-title" style="margin-bottom:10px; color:var(--accent); font-weight:700;"></div>
+                <div id="quiz-progress" style="opacity:.9; font-size:13px; margin-bottom:10px;"></div>
+                <div id="quiz-question" style="font-size:15px; margin-bottom:10px;"></div>
+                <div id="quiz-answers" style="display:flex; flex-direction:column; gap:10px;"></div>
+            </div>
+
+            <div id="quiz-debug" class="block" style="margin-top:12px; font-size:12px; white-space:pre-line;"></div>
+            <div id="quiz-result" class="block" style="display:none;"></div>
+        </div>
+    </div>
+
     <!-- CREDITS -->
     <div class="credit">
         💻 Сайт для: 𝓔𝓷𝓪𝓶𝓸𝓻𝓪𝓭𝓸 𝓭𝓮 𝓾𝓷 𝓼𝓾𝓮ñ𝓸
         <br> <!-- ENAMORADO_UNIQUE_SIGNATURE_2026_DO_NOT_REMOVE -->
         👨‍💻 Розробник: <a href="https://t.me/tech_delulu" target="_blank">@tech_delulu</a>
     </div>
-    <!--<div id="assistant">
+    <div id="assistant">
 
         <div id="assistant-header">
             😈 Дявольонок
@@ -1085,10 +1115,14 @@ Do not remove. Digital ownership marker.
 
         <div id="assistant-messages"></div>
 
-        <input id="assistant-input"
-               placeholder="Запитай мене..." />
+        <input id="assistant-input" placeholder="Напиши питання..." />
+        <div id="assistant-messages"></div>
 
-    </div>-->
+    </div>
+    <script src="js/knowledge-loader.js"></script>
+    <script src="js/search-engine.js"></script>
+    <script src="js/assistant.js"></script>
+    <script src="js/quiz-engine.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

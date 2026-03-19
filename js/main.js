@@ -82,14 +82,210 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-document.addEventListener("DOMContentLoaded", async () => {
+let __appBootstrapped = false;
 
-    await KnowledgeBase.load();
+function logDebug(message) {
+    const box = document.getElementById("quiz-debug");
+    if (!box) return;
+    const div = document.createElement("div");
+    div.innerText = message;
+    box.appendChild(div);
+}
 
-    Assistant.init();
-    QuizEngine.init();
+async function bootstrap() {
+    if (__appBootstrapped) return;
+    __appBootstrapped = true;
 
+    try {
+        logDebug("Bootstrapping: load knowledge...");
+        await window.KnowledgeBase.load();
+        logDebug("Bootstrapping: knowledge loaded");
+
+        Assistant.init();
+        logDebug("Bootstrapping: assistant init ok");
+
+        logDebug("Bootstrapping: init quiz engine...");
+        await QuizEngine.init();
+        logDebug("Bootstrapping: quiz engine init ok");
+
+        logDebug("Bootstrapping: init quiz UI...");
+        QuizUI.init();
+        logDebug("Bootstrapping: quiz UI init ok");
+    } catch (e) {
+        logDebug("⚠️ Bootstrap failed: " + (e && e.message ? e.message : String(e)));
+        const resultBox = document.getElementById("quiz-result");
+        if (resultBox) {
+            resultBox.style.display = "block";
+            resultBox.innerText = "⚠️ Quiz boot failed. See debug panel.";
+        }
+        throw e;
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    bootstrap();
 });
+
+// In case this script loads after DOMContentLoaded (edge cases in some hosting/dev setups).
+if (document.readyState !== "loading") {
+    // Ensure QuizUI const is initialized before we call bootstrap().
+    setTimeout(bootstrap, 0);
+}
+
+// Minimal quiz UI (Stage 1) — step-by-step rendering.
+const QuizUI = {
+    state: {
+        testName: null,
+        index: 0
+    },
+
+    init() {
+        const adminBtn = document.getElementById("quiz-start-admin");
+        const roleBtn = document.getElementById("quiz-start-role");
+        if (!adminBtn || !roleBtn) return;
+
+        adminBtn.addEventListener("click", () => this.start("admin_test"));
+        roleBtn.addEventListener("click", () => this.start("role_test"));
+    },
+
+    start(testName) {
+        logDebug("Quiz start clicked: " + testName);
+
+        this.state.testName = testName;
+        this.state.index = 0;
+
+        logDebug("QuizEngine.start called");
+        const testLoaded = QuizEngine.tests && QuizEngine.tests[testName];
+        if (!testLoaded) {
+            logDebug("ERROR: test not found: " + testName);
+            const resultBox = document.getElementById("quiz-result");
+            if (resultBox) {
+                resultBox.style.display = "block";
+                resultBox.innerText = "⚠️ Test not loaded";
+            }
+            return;
+        }
+        logDebug("Test loaded: " + testName);
+
+        QuizEngine.start(testName);
+
+        const screen = document.getElementById("quiz-screen");
+        const resultBox = document.getElementById("quiz-result");
+        if (screen) screen.style.display = "block";
+        if (resultBox) resultBox.style.display = "none";
+
+        this.renderQuestion();
+    },
+
+    renderQuestion() {
+        const title = document.getElementById("quiz-title");
+        const progress = document.getElementById("quiz-progress");
+        const questionEl = document.getElementById("quiz-question");
+        const answersEl = document.getElementById("quiz-answers");
+
+        const total = QuizEngine.getTotalQuestions();
+        const q = QuizEngine.getQuestion(this.state.index);
+        if (!answersEl) return;
+        if (!q) {
+            if (questionEl) questionEl.innerText = "Тест не завантажився. Спробуй ще раз.";
+            if (answersEl) answersEl.innerHTML = "";
+            if (progress) progress.innerText = "";
+            logDebug("⚠️ renderQuestion: question is missing for index " + this.state.index);
+            return;
+        }
+
+        if (!total || total <= 0) {
+            if (questionEl) questionEl.innerText = "⚠️ No questions available";
+            logDebug("⚠️ renderQuestion: no questions available");
+            return;
+        }
+
+        const testMeta = QuizEngine.getActiveTest();
+        if (title) title.innerText = (testMeta && testMeta.title) ? testMeta.title : "Тест";
+        if (progress) progress.innerText = `Питання ${this.state.index + 1} з ${total}`;
+        if (questionEl) questionEl.innerText = q.question || "";
+
+        answersEl.innerHTML = "";
+
+        const answers = Array.isArray(q.answers) ? q.answers : [];
+        logDebug("Rendering question: " + q.id);
+        if (!answers.length) {
+            logDebug("⚠️ renderQuestion: answers array empty for question " + q.id);
+            if (questionEl) questionEl.innerText = "⚠️ No questions available";
+        }
+        answers.forEach((choice, choiceIndex) => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "quiz-btn";
+            btn.innerText = choice.text || `Варіант ${choiceIndex + 1}`;
+            btn.addEventListener("click", () => this.handleAnswer(choiceIndex));
+            answersEl.appendChild(btn);
+        });
+    },
+
+    handleAnswer(choiceIndex) {
+        const q = QuizEngine.getQuestion(this.state.index);
+        if (!q) return;
+
+        logDebug("Answer selected: " + choiceIndex);
+
+        QuizEngine.answerQuestion(q.id, choiceIndex);
+        this.state.index += 1;
+
+        const total = QuizEngine.getTotalQuestions();
+        if (this.state.index >= total) {
+            logDebug("Computing result...");
+            const result = QuizEngine.computeResult();
+            this.renderResult(result);
+            return;
+        }
+
+        this.renderQuestion();
+    },
+
+    renderResult(result) {
+        const screen = document.getElementById("quiz-screen");
+        const resultBox = document.getElementById("quiz-result");
+        if (screen) screen.style.display = "none";
+        if (resultBox) resultBox.style.display = "block";
+
+        if (!result || !result.entity || !resultBox) {
+            logDebug("⚠️ computeResult failed (null/empty entity)");
+            if (resultBox) resultBox.innerText = "⚠️ Failed to compute result";
+            return;
+        }
+
+        const entity = result.entity;
+        let text = "";
+
+        if (result.result_type === "admin") {
+            text += `Адмін: ${entity.name || "невідомий"}`;
+            if (entity.nickname) text += ` (${entity.nickname})`;
+            text += "\n\n";
+            if (Array.isArray(entity.traits) && entity.traits.length) {
+                text += `Риси:\n${entity.traits.map(t => `• ${t}`).join("\n")}\n\n`;
+            }
+            if (entity.playstyle) text += `Стиль гри:\n${entity.playstyle}\n\n`;
+            if (Array.isArray(entity.favorite_roles) && entity.favorite_roles.length) {
+                text += `Улюблені ролі:\n${entity.favorite_roles.map(r => `• ${r}`).join("\n")}`;
+            }
+        }
+
+        if (result.result_type === "role") {
+            text += `${entity.emoji || ""} ${entity.name || "невідома роль"}`.trim();
+            text += "\n";
+            if (entity.team) text += `Команда: ${entity.team}\n\n`;
+            if (Array.isArray(entity.abilities) && entity.abilities.length) {
+                text += `Здібності:\n${entity.abilities.map(a => `• ${a}`).join("\n")}\n\n`;
+            }
+            if (Array.isArray(entity.tips) && entity.tips.length) {
+                text += `Поради:\n${entity.tips.map(t => `• ${t}`).join("\n")}`;
+            }
+        }
+
+        resultBox.innerText = text.trim();
+    }
+};
 
 /*Watermark*/
 console.log(

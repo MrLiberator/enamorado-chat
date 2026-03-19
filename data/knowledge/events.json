@@ -3,7 +3,6 @@
     "id": "shadow_without_home",
     "name": "Тінь без дому",
     "emoji": "🗡️🌑",
-    "day": "monday",
 
     "keywords": [
       "тінь без дому",
@@ -47,7 +46,6 @@
     "id": "bloody_lantern",
     "name": "Кривавий Ліхтар",
     "emoji": "🩸🌘",
-    "day": "monday",
 
     "keywords": [
       "кривавий ліхтар",
@@ -86,15 +84,12 @@
       "buffs": false,
       "role_changes": false,
       "all_roles_enabled": true
-    },
-
-    "difficulty": "medium"
+    }
   },
   {
     "id": "shadow_behind_you",
     "name": "Тінь за спиною",
     "emoji": "🕯️🖤",
-    "day": "monday",
 
     "keywords": [
       "тінь за спиною",
@@ -132,15 +127,12 @@
       "buffs": false,
       "role_changes": false,
       "all_roles_enabled": true
-    },
-
-    "difficulty": "medium"
+    }
   },
   {
     "id": "no_buffs_game",
     "name": "Гра Без Бафів",
     "emoji": "🕯️💀",
-    "day": "tuesday",
 
     "keywords": [
       "гра без бафів",
@@ -176,15 +168,12 @@
       "buffs": false,
       "role_changes": false,
       "all_roles_enabled": true
-    },
-
-    "difficulty": "medium"
+    }
   },
   {
     "id": "kiss_of_death",
     "name": "Поцілунок смерті",
     "emoji": "💋🔪",
-    "day": "wednesday",
 
     "keywords": [
       "поцілунок смерті",
@@ -222,15 +211,12 @@
       "buffs": false,
       "role_changes": false,
       "all_roles_enabled": true
-    },
-
-    "difficulty": "medium"
+    }
   },
   {
     "id": "puppet_master",
     "name": "Ляльковод",
     "emoji": "🕸️🌒",
-    "day": "wednesday",
 
     "keywords": [
       "ляльковод",
@@ -268,15 +254,12 @@
       "buffs": false,
       "role_changes": false,
       "all_roles_enabled": true
-    },
-
-    "difficulty": "hard"
+    }
   },
   {
     "id": "anonymous_report",
     "name": "Анонімний донос",
     "emoji": "🔥🩶",
-    "day": "wednesday",
 
     "keywords": [
       "анонімний донос",
@@ -314,15 +297,12 @@
       "buffs": false,
       "role_changes": false,
       "all_roles_enabled": true
-    },
-
-    "difficulty": "medium"
+    }
   },
   {
     "id": "mafia_role_shuffle",
     "name": "День Змін у Мафії",
     "emoji": "🎭🔥",
-    "day": "thursday",
 
     "keywords": [
       "день змін",
@@ -360,15 +340,12 @@
       "buffs": false,
       "role_changes": true,
       "all_roles_enabled": true
-    },
-
-    "difficulty": "hard"
+    }
   },
   {
     "id": "prophecy",
     "name": "Пророцтво",
     "emoji": "🔮🌒",
-    "day": "friday",
 
     "keywords": [
       "пророцтво",
@@ -406,15 +383,12 @@
       "buffs": false,
       "role_changes": false,
       "all_roles_enabled": true
-    },
-
-    "difficulty": "medium"
+    }
   },
   {
     "id": "cursed_promise",
     "name": "Проклята обіцянка",
     "emoji": "🔥🕯",
-    "day": "friday",
 
     "keywords": [
       "проклята обіцянка",
@@ -450,15 +424,12 @@
       "buffs": false,
       "role_changes": false,
       "all_roles_enabled": true
-    },
-
-    "difficulty": "hard"
+    }
   },
   {
     "id": "double_strike",
     "name": "Подвійний удар",
     "emoji": "🩶🔪",
-    "day": "friday",
 
     "keywords": [
       "подвійний удар",
@@ -494,15 +465,12 @@
       "buffs": false,
       "role_changes": false,
       "all_roles_enabled": true
-    },
-
-    "difficulty": "medium"
+    }
   },
   {
     "id": "soulmates",
     "name": "Половинки",
     "emoji": "🩷",
-    "day": "saturday",
 
     "keywords": [
       "половинки",
@@ -544,15 +512,12 @@
       "buffs": false,
       "role_changes": false,
       "all_roles_enabled": true
-    },
-
-    "difficulty": "medium"
+    }
   },
   {
     "id": "no_rules_mode",
     "name": "Режим без правил",
     "emoji": "🔥",
-    "day": "sunday",
 
     "keywords": [
       "режим без правил",
@@ -591,8 +556,6 @@
       "buffs": false,
       "role_changes": false,
       "all_roles_enabled": true
-    },
-
-    "difficulty": "chaos"
+    }
   }
 ]
