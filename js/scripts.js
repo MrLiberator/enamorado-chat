@@ -5,11 +5,18 @@ document.addEventListener("dragstart", e => e.preventDefault());
 function openTab(id) {
 
     document.querySelectorAll(".tab-content")
-        .forEach(el => el.style.display = "none");
+        .forEach(el => {
+            el.style.display = "none";
+            el.classList.remove("active");
+        });
+
+    document.querySelectorAll(".nav-btn")
+        .forEach(btn => btn.classList.toggle("active", btn.dataset.tab === id));
 
     const tab = document.getElementById(id);
 
     tab.style.display = "block";
+    tab.classList.add("active");
 
     window.scrollTo({
         top: tab.offsetTop - 70,

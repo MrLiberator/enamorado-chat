@@ -61,93 +61,178 @@ Do not remove. Digital ownership marker.
     <!--НАВІГАЦІЯ-->
     <nav class="navbar">
 
-        <button class="nav-btn" onclick="openTab('events')">
-            💀 Архів Ліквідаії
+        <button class="nav-btn" data-tab="events" onclick="openTab('events')">
+            <span class="nav-icon">💀</span>
+            <span class="nav-label">Архів Ліквідації</span>
         </button>
 
-        <button class="nav-btn" onclick="openTab('rules')">
-            📜 Правила Чату
+        <button class="nav-btn" data-tab="rules" onclick="openTab('rules')">
+            <span class="nav-icon">📜</span>
+            <span class="nav-label">Правила Чату</span>
         </button>
 
-        <button class="nav-btn" onclick="openTab('game')">
-            ⚔️ Правила Гри
+        <button class="nav-btn" data-tab="game" onclick="openTab('game')">
+            <span class="nav-icon">⚔️</span>
+            <span class="nav-label">Правила Гри</span>
         </button>
 
-        <button class="nav-btn" onclick="openTab('roles')">
-            🕵️ Ролі Мафія
+        <button class="nav-btn" data-tab="roles" onclick="openTab('roles')">
+            <span class="nav-icon">🕵️</span>
+            <span class="nav-label">Ролі Мафія</span>
         </button>
 
     </nav>
     <!-- ІВЕНТИ -->
     <div id="events" class="tab-content">
-        <div class="container">
+        <div class="container events-container">
             <h1>АРХІВ ЛІКВІДАЦІЇ</h1>
             <!-- ENAMORADO_UNIQUE_SIGNATURE_2026_DO_NOT_REMOVE -->
+            <p class="events-intro">
+                Обирай сценарій гри та натискай на картку, щоб відкрити повний опис події.
+            </p>
 
             <div class="all-events">
 
                 <div class="event" onclick="toggleEvent(this)">
-                    <div class="event-header">🗡️🌑 ТІНЬ БЕЗ ДОМУ 🌑🗡️</div>
+                    <div class="event-card-top">
+                        <div>
+                            <div class="event-header">🗡️🌑 ТІНЬ БЕЗ ДОМУ 🌑🗡️</div>
+                            <div class="event-meta">Сценарій гри. Натисни, щоб відкрити опис.</div>
+                        </div>
+                        <span class="event-toggle">▾</span>
+                    </div>
                     <div class="description" data-event="shadow1"></div>
                 </div>
 
                 <div class="event" onclick="toggleEvent(this)">
-                    <div class="event-header">🩸🌘 КРИВАВИЙ ЛІХТАР 🌘🩸</div>
+                    <div class="event-card-top">
+                        <div>
+                            <div class="event-header">🩸🌘 КРИВАВИЙ ЛІХТАР 🌘🩸</div>
+                            <div class="event-meta">Сценарій гри. Натисни, щоб відкрити опис.</div>
+                        </div>
+                        <span class="event-toggle">▾</span>
+                    </div>
                     <div class="description" data-event="shadow2"></div>
                 </div>
 
                 <div class="event" onclick="toggleEvent(this)">
-                    <div class="event-header">🕯️🖤 ТІНЬ ЗА СПИНОЮ 🖤🕯️</div>
+                    <div class="event-card-top">
+                        <div>
+                            <div class="event-header">🕯️🖤 ТІНЬ ЗА СПИНОЮ 🖤🕯️</div>
+                            <div class="event-meta">Сценарій гри. Натисни, щоб відкрити опис.</div>
+                        </div>
+                        <span class="event-toggle">▾</span>
+                    </div>
                     <div class="description" data-event="shadow3"></div>
                 </div>
 
                 <div class="event" onclick="toggleEvent(this)">
-                    <div class="event-header">🕯️💀 Гра Без Бафів 🔥🩸</div>
+                    <div class="event-card-top">
+                        <div>
+                            <div class="event-header">🕯️💀 Гра Без Бафів 🔥🩸</div>
+                            <div class="event-meta">Сценарій гри. Натисни, щоб відкрити опис.</div>
+                        </div>
+                        <span class="event-toggle">▾</span>
+                    </div>
                     <div class="description" data-event="shadow4"></div>
                 </div>
 
                 <div class="event" onclick="toggleEvent(this)">
-                    <div class="event-header">💋🔪 ПОЦІЛУНОК СМЕРТІ 🔪💋</div>
+                    <div class="event-card-top">
+                        <div>
+                            <div class="event-header">💋🔪 ПОЦІЛУНОК СМЕРТІ 🔪💋</div>
+                            <div class="event-meta">Сценарій гри. Натисни, щоб відкрити опис.</div>
+                        </div>
+                        <span class="event-toggle">▾</span>
+                    </div>
                     <div class="description" data-event="shadow5"></div>
                 </div>
 
                 <div class="event" onclick="toggleEvent(this)">
-                    <div class="event-header">🕸️🌒 ЛЯЛЬКОВОД 🌒🕸️</div>
+                    <div class="event-card-top">
+                        <div>
+                            <div class="event-header">🕸️🌒 ЛЯЛЬКОВОД 🌒🕸️</div>
+                            <div class="event-meta">Сценарій гри. Натисни, щоб відкрити опис.</div>
+                        </div>
+                        <span class="event-toggle">▾</span>
+                    </div>
                     <div class="description" data-event="shadow6"></div>
                 </div>
 
                 <div class="event" onclick="toggleEvent(this)">
-                    <div class="event-header">🔥🩶 АНОНІМНИЙ ДОНОС 🩶🔥</div>
+                    <div class="event-card-top">
+                        <div>
+                            <div class="event-header">🔥🩶 АНОНІМНИЙ ДОНОС 🩶🔥</div>
+                            <div class="event-meta">Сценарій гри. Натисни, щоб відкрити опис.</div>
+                        </div>
+                        <span class="event-toggle">▾</span>
+                    </div>
                     <div class="description" data-event="shadow7"></div>
                 </div>
 
                 <div class="event" onclick="toggleEvent(this)">
-                    <div class="event-header">🎭 День Змін у Мафії 🔥</div>
+                    <div class="event-card-top">
+                        <div>
+                            <div class="event-header">🎭 День Змін у Мафії 🔥</div>
+                            <div class="event-meta">Сценарій гри. Натисни, щоб відкрити опис.</div>
+                        </div>
+                        <span class="event-toggle">▾</span>
+                    </div>
                     <div class="description" data-event="shadow8"></div>
                 </div>
 
                 <div class="event" onclick="toggleEvent(this)">
-                    <div class="event-header">🔮🌒 ПРОРОЦТВО 🌒🔮</div>
+                    <div class="event-card-top">
+                        <div>
+                            <div class="event-header">🔮🌒 ПРОРОЦТВО 🌒🔮</div>
+                            <div class="event-meta">Сценарій гри. Натисни, щоб відкрити опис.</div>
+                        </div>
+                        <span class="event-toggle">▾</span>
+                    </div>
                     <div class="description" data-event="shadow9"></div>
                 </div>
 
                 <div class="event" onclick="toggleEvent(this)">
-                    <div class="event-header">🔥🕯 ПРОКЛЯТА ОБІЦЯНКА 🕯🔥</div>
+                    <div class="event-card-top">
+                        <div>
+                            <div class="event-header">🔥🕯 ПРОКЛЯТА ОБІЦЯНКА 🕯🔥</div>
+                            <div class="event-meta">Сценарій гри. Натисни, щоб відкрити опис.</div>
+                        </div>
+                        <span class="event-toggle">▾</span>
+                    </div>
                     <div class="description" data-event="shadow10"></div>
                 </div>
 
                 <div class="event" onclick="toggleEvent(this)">
-                    <div class="event-header">🩶🔪 ПОДВІЙНИЙ УДАР 🔪🩶</div>
+                    <div class="event-card-top">
+                        <div>
+                            <div class="event-header">🩶🔪 ПОДВІЙНИЙ УДАР 🔪🩶</div>
+                            <div class="event-meta">Сценарій гри. Натисни, щоб відкрити опис.</div>
+                        </div>
+                        <span class="event-toggle">▾</span>
+                    </div>
                     <div class="description" data-event="shadow11"></div>
                 </div>
 
                 <div class="event" onclick="toggleEvent(this)">
-                    <div class="event-header">🩷 Половинки 🩷</div>
+                    <div class="event-card-top">
+                        <div>
+                            <div class="event-header">🩷 Половинки 🩷</div>
+                            <div class="event-meta">Сценарій гри. Натисни, щоб відкрити опис.</div>
+                        </div>
+                        <span class="event-toggle">▾</span>
+                    </div>
                     <div class="description" data-event="shadow12"></div>
                 </div>
 
                 <div class="event" onclick="toggleEvent(this)">
-                    <div class="event-header">🔥 РЕЖИМ БЕЗ ПРАВИЛ 🔥</div>
+                    <div class="event-card-top">
+                        <div>
+                            <div class="event-header">🔥 РЕЖИМ БЕЗ ПРАВИЛ 🔥</div>
+                            <div class="event-meta">Сценарій гри. Натисни, щоб відкрити опис.</div>
+                        </div>
+                        <span class="event-toggle">▾</span>
+                    </div>
                     <div class="description" data-event="shadow13"></div>
                 </div>
 
@@ -156,149 +241,138 @@ Do not remove. Digital ownership marker.
     </div>
     <!-- ПРАВИЛА ЧАТУ -->
     <div id="rules" class="tab-content">
-        <div class="container">
+        <div class="container chat-rules">
             <h1>📌 ПРАВИЛА ЧАТУ</h1>
             <!-- ENAMORADO_UNIQUE_SIGNATURE_2026_DO_NOT_REMOVE -->
-            <div class="rule" onclick="toggleRule(this)">
-                <div class="rule-title">1. Повага до всіх учасників</div>
-                <div class="rule-text">
-                    <strong>Заборонені</strong> образи, приниження, дискримінація за віком, статтю, релігією чи національністю.
-                    <strong>Забороняється</strong> психологічний тиск, маніпуляції, газлайтинг та інші форми токсичної поведінки.
-                    Дотримуйтесь субординації.
-                    <div class="punishment">
-                        🔸 Мут | Варн | Бан 🚫
+            <ol class="chat-rules-grid">
+                <li class="chat-rule-card">
+                    <div class="chat-rule-title">1. Повага до всіх учасників</div>
+                    <div class="chat-rule-desc">Заборонені образи, приниження, дискримінація за віком, статтю, релігією чи національністю. Забороняється психологічний тиск, маніпуляції, газлайтинг та інші форми токсичної поведінки. Дотримуйтесь субординації.</div>
+                    <div class="chat-rule-pills">
+                        <span class="chat-rule-pill">🔇 Мут</span>
+                        <span class="chat-rule-pill">⚠️ Варн</span>
+                        <span class="chat-rule-pill">🚫 Бан</span>
                     </div>
-                </div>
-            </div>
+                </li>
 
-            <div class="rule" onclick="toggleRule(this)">
-                <div class="rule-title">2. Заборона розпалювання конфліктів</div>
-                <div class="rule-text">
-                    Не втручайтесь у чужі суперечки, не провокуйте, не використовуйте нецензурну лексику та образливі коментарі.
-                    <!--<strong>Заборонено</strong> провокувати учасників, навмисно створювати конфліктні ситуації, втручатися в чужі суперечки та продовжувати їх після зауваження адміністрації.-->
-                    <div class="punishment">
-                        🔸 Мут | Варн | Бан 🚫
+                <li class="chat-rule-card">
+                    <div class="chat-rule-title">2. Заборона розпалювання конфліктів</div>
+                    <div class="chat-rule-desc">Не втручайтесь у чужі суперечки, не провокуйте, не використовуйте нецензурну лексику та образливі коментарі.</div>
+                    <div class="chat-rule-pills">
+                        <span class="chat-rule-pill">🔇 Мут</span>
+                        <span class="chat-rule-pill">⚠️ Варн</span>
+                        <span class="chat-rule-pill">🚫 Бан</span>
                     </div>
-                </div>
-            </div>
+                </li>
 
-            <div class="rule" onclick="toggleRule(this)">
-                <div class="rule-title">3. Спам та флуд</div>
-                <div class="rule-text">
-                    <strong>Заборонений</strong> спам, флуд, офтоп та зловживання "!" та командами ботів.
-                    <strong>Заборонено</strong> використання сторонніх програм без дозволу адміністрації.
-                    <div class="punishment">
-                        🔸 Мут | Варн
+                <li class="chat-rule-card">
+                    <div class="chat-rule-title">3. Спам та флуд</div>
+                    <div class="chat-rule-desc">Заборонений спам, флуд, офтоп та зловживання "!" і командами ботів. Заборонено використання сторонніх програм без дозволу адміністрації.</div>
+                    <div class="chat-rule-pills">
+                        <span class="chat-rule-pill">🔇 Мут</span>
+                        <span class="chat-rule-pill">⚠️ Варн</span>
                     </div>
-                </div>
-            </div>
+                </li>
 
-            <div class="rule" onclick="toggleRule(this)">
-                <div class="rule-title">4. Особиста інформація</div>
-                <div class="rule-text">
-                    <strong>Заборонено</strong> поширювати особисті дані учасників (номер телефону, адреса, соцмережі, фото, IP тощо) без їх прямої згоди.
-                    <div class="punishment">
-                        🔸 Мут | Варн | Бан 🚫
+                <li class="chat-rule-card">
+                    <div class="chat-rule-title">4. Особиста інформація</div>
+                    <div class="chat-rule-desc">Заборонено поширювати особисті дані учасників: номер телефону, адресу, соцмережі, фото, IP та інше без їх прямої згоди.</div>
+                    <div class="chat-rule-pills">
+                        <span class="chat-rule-pill">🔇 Мут</span>
+                        <span class="chat-rule-pill">⚠️ Варн</span>
+                        <span class="chat-rule-pill">🚫 Бан</span>
                     </div>
-                </div>
-            </div>
+                </li>
 
-            <div class="rule" onclick="toggleRule(this)">
-                <div class="rule-title">5. Ігнорування адміністрації</div>
-                <div class="rule-text">
-                    Зауваження адміністрації є обов’язковими до виконання, ігнорування або знецінення рішень адміністрації <strong>суворо</strong> карається.
-                    <div class="punishment">
-                        🔸 Мут | Варн
+                <li class="chat-rule-card">
+                    <div class="chat-rule-title">5. Ігнорування адміністрації</div>
+                    <div class="chat-rule-desc">Зауваження адміністрації є обов’язковими до виконання, ігнорування або знецінення рішень адміністрації суворо карається.</div>
+                    <div class="chat-rule-pills">
+                        <span class="chat-rule-pill">🔇 Мут</span>
+                        <span class="chat-rule-pill">⚠️ Варн</span>
                     </div>
-                </div>
-            </div>
+                </li>
 
-            <div class="rule" onclick="toggleRule(this)">
-                <div class="rule-title">6. Реклама та самопросування</div>
-                <div class="rule-text">
-                    <strong>Заборонена</strong> будь-яка реклама без дозволу адміністрації.
-                    <div class="punishment">
-                        🔸 Миттєвий <strong>бан</strong> 🚫
+                <li class="chat-rule-card">
+                    <div class="chat-rule-title">6. Реклама та самопросування</div>
+                    <div class="chat-rule-desc">Будь-яка реклама без дозволу адміністрації заборонена.</div>
+                    <div class="chat-rule-pills">
+                        <span class="chat-rule-pill">🚫 Миттєвий бан</span>
                     </div>
-                </div>
-            </div>
+                </li>
 
-            <div class="rule" onclick="toggleRule(this)">
-                <div class="rule-title">7. Контент 18+</div>
-                <div class="rule-text">
-                    <strong>Заборонено</strong> надсилати 18+ матеріалів в любому вигляді, шок-контент, сцени насильства, незаконний контент або підозрілі/шахрайські посилання.
-                    <div class="punishment">
-                        🔸 Бан 🚫
+                <li class="chat-rule-card">
+                    <div class="chat-rule-title">7. Контент 18+</div>
+                    <div class="chat-rule-desc">Заборонено надсилати 18+ матеріали в будь-якому вигляді, шок-контент, сцени насильства, незаконний контент або підозрілі чи шахрайські посилання.</div>
+                    <div class="chat-rule-pills">
+                        <span class="chat-rule-pill">🚫 Бан</span>
                     </div>
-                </div>
-            </div>
+                </li>
 
-            <div class="rule" onclick="toggleRule(this)">
-                <div class="rule-title">8. Мова та оформлення</div>
-                <div class="rule-text">
-                    <strong>Не допускається</strong> зловживання КАПСОМ, надмірною кількістю емодзі, агресивними або провокаційними ніками й аватарками.
-                    <div class="punishment">
-                        🔸 Мут | Варн | Бан 🚫
+                <li class="chat-rule-card">
+                    <div class="chat-rule-title">8. Мова та оформлення</div>
+                    <div class="chat-rule-desc">Не допускається зловживання КАПСОМ, надмірною кількістю емодзі, агресивними або провокаційними ніками й аватарками.</div>
+                    <div class="chat-rule-pills">
+                        <span class="chat-rule-pill">🔇 Мут</span>
+                        <span class="chat-rule-pill">⚠️ Варн</span>
+                        <span class="chat-rule-pill">🚫 Бан</span>
                     </div>
-                </div>
-            </div>
+                </li>
 
-            <div class="rule" onclick="toggleRule(this)">
-                <div class="rule-title">9. Політика та провокаційні теми</div>
-                <div class="rule-text">
-                    Обговорення політики, війни та інших тем, що можуть викликати масові суперечки, <strong>заборонене</strong>, якщо не дозволено адміністрацією.
-                    <div class="punishment">
-                        🔸 Мут | Варн | Бан 🚫
+                <li class="chat-rule-card">
+                    <div class="chat-rule-title">9. Політика та провокаційні теми</div>
+                    <div class="chat-rule-desc">Обговорення політики, війни та інших тем, що можуть викликати масові суперечки, заборонене, якщо не дозволено адміністрацією.</div>
+                    <div class="chat-rule-pills">
+                        <span class="chat-rule-pill">🔇 Мут</span>
+                        <span class="chat-rule-pill">⚠️ Варн</span>
+                        <span class="chat-rule-pill">🚫 Бан</span>
                     </div>
-                </div>
-            </div>
+                </li>
 
-            <div class="rule" onclick="toggleRule(this)">
-                <div class="rule-title">10. Погрози та заклики до насильства</div>
-                <div class="rule-text">
-                    Будь-які погрози, залякування, заклики до насильства або шкоди іншим учасникам <strong>суворо заборонено</strong>.
-                    <div class="punishment">
-                        🔸 <strong>Миттєвий бан</strong> 🚫
+                <li class="chat-rule-card">
+                    <div class="chat-rule-title">10. Погрози та заклики до насильства</div>
+                    <div class="chat-rule-desc">Будь-які погрози, залякування, заклики до насильства або шкоди іншим учасникам суворо заборонено.</div>
+                    <div class="chat-rule-pills">
+                        <span class="chat-rule-pill">🚫 Миттєвий бан</span>
                     </div>
-                </div>
-            </div>
+                </li>
 
-            <div class="rule" onclick="toggleRule(this)">
-                <div class="rule-title">11. Дезінформація та Фейки</div>
-                <div class="rule-text">
-                    <strong>Заборонено</strong> поширювати неправдиву інформацію та вводити учасників в оману.
-                    <strong>Заборонені</strong> фейкові або додаткові акаунти без дозволу адміністрації.
-                    Маскування голосу або імітація інших учасників чи адміністрації карається <strong>сурово</strong>.
-                    <div class="punishment">
-                        🔸 Варн | <strong>Миттєвий бан</strong> 🚫
+                <li class="chat-rule-card">
+                    <div class="chat-rule-title">11. Дезінформація та фейки</div>
+                    <div class="chat-rule-desc">Заборонено поширювати неправдиву інформацію та вводити учасників в оману. Заборонені фейкові або додаткові акаунти без дозволу адміністрації. Маскування голосу або імітація інших учасників чи адміністрації карається суворо.</div>
+                    <div class="chat-rule-pills">
+                        <span class="chat-rule-pill">⚠️ Варн</span>
+                        <span class="chat-rule-pill">🚫 Миттєвий бан</span>
                     </div>
-                </div>
-            </div>
+                </li>
 
-            <div class="rule" onclick="toggleRule(this)">
-                <div class="rule-title">12. Масові згадки (@)</div>
-                <div class="rule-text">
-                    <strong>Заборонено</strong> без потреби використовувати масові згадки учасників або адміністрації.
-                    <div class="punishment">
-                        🔸 Мут | Варн
+                <li class="chat-rule-card">
+                    <div class="chat-rule-title">12. Масові згадки (@)</div>
+                    <div class="chat-rule-desc">Заборонено без потреби використовувати масові згадки учасників або адміністрації.</div>
+                    <div class="chat-rule-pills">
+                        <span class="chat-rule-pill">🔇 Мут</span>
+                        <span class="chat-rule-pill">⚠️ Варн</span>
                     </div>
-                </div>
-            </div>
+                </li>
 
-            <div class="rule" onclick="toggleRule(this)">
-                <div class="rule-title">13. Рішення адміністрації</div>
-                <div class="rule-text">
-                    Адміністрація має право змінювати правила та приймати рішення в індивідуальних випадках.
-                    Час та форма покарання можуть відрізнятися залежно від обставин порушення та історії користувача.
-                    <strong>Рішення адміністрації не обговорюються.</strong>
-                </div>
-            </div>
+                <li class="chat-rule-card chat-rule-card-full">
+                    <div class="chat-rule-title">13. Рішення адміністрації</div>
+                    <div class="chat-rule-desc">Адміністрація має право змінювати правила та приймати рішення в індивідуальних випадках. Час та форма покарання можуть відрізнятися залежно від обставин порушення та історії користувача. Рішення адміністрації не обговорюються.</div>
+                    <div class="chat-rule-pills">
+                        <span class="chat-rule-pill chat-rule-pill-warning">⚖️ Індивідуально</span>
+                    </div>
+                </li>
+            </ol>
 
-            <div class="block" style="opacity:.8; font-size:13px; border-left:4px solid var(--accent);">
-                ⚖️ Всі правила гри та покарання застосовуються також до голосового й відеочату.
-            </div>
-            <div class="block" style="opacity:.8; font-size:13px; border-left:4px solid var(--accent);">
-                ⚠️ Користувач несе відповідальність за будь-який контент, який він публікує (включаючи переслані повідомлення).
+            <div class="chat-rules-notes">
+                <div class="chat-rule-note">
+                    <div class="chat-rule-note-title">🎙 Голосовий і відеочат</div>
+                    <div class="chat-rule-note-desc">Всі правила гри та покарання застосовуються також до голосового й відеочату.</div>
+                </div>
+                <div class="chat-rule-note">
+                    <div class="chat-rule-note-title">⚠️ Відповідальність за контент</div>
+                    <div class="chat-rule-note-desc">Користувач несе відповідальність за будь-який контент, який він публікує, включаючи переслані повідомлення.</div>
+                </div>
             </div>
         </div>
     </div>
@@ -307,90 +381,113 @@ Do not remove. Digital ownership marker.
         <div class="container">
 
             <h1>❌ ПРАВИЛА ГРИ ❌</h1>
-            <!-- ПОРУШЕННЯ -->
-            <div class="block">
-                <h2 style="color:var(--accent)">☠️ Порушення → Покарання</h2>
+            <div class="rules-section">
+                <h2>☠️ Порушення → Покарання</h2>
 
-                <div class="event">
-                    ➤ АФК / офлайн / відсутність нічного​ ходу<br>
-                    🔇 МУТ​ 30 хв.
+                <div class="rule-card">
+                    <div class="rule-title">➤ АФК / офлайн</div>
+                    <div class="rule-desc">Відсутність нічного ходу.</div>
+                    <div class="rule-punishment">🔇 МУТ 30 хв.</div>
                 </div>
 
-                <div class="event">
-                    ➤ Рандом у перші ночі або при живому слідчому<br>
-                    🔇 МУТ 40 хв.
+                <div class="rule-card">
+                    <div class="rule-title">➤ Рандом у перші ночі</div>
+                    <div class="rule-desc">Або при живому слідчому.</div>
+                    <div class="rule-punishment">🔇 МУТ 40 хв.</div>
                 </div>
 
-                <div class="event">
-                    ➤ Зміна або маскування ніку<br>
-                    🔇 МУТ 50 хв.
+                <div class="rule-card">
+                    <div class="rule-title">➤ Зміна або маскування ніку</div>
+                    <div class="rule-desc">Будь-яка підміна або приховування ніка.</div>
+                    <div class="rule-punishment">🔇 МУТ 50 хв.</div>
                 </div>
 
-                <div class="event">
-                    ➤ Лів без причини / під час голосування<br>
-                    🔇 МУТ 45 хв.
+                <div class="rule-card">
+                    <div class="rule-title">➤ Лів без причини</div>
+                    <div class="rule-desc">Або вихід під час голосування.</div>
+                    <div class="rule-punishment">🔇 МУТ 45 хв.</div>
                 </div>
 
-                <div class="event">
-                    ➤ Паління ролей (Чат/ГЧ/ПП)<br>
-                    🔇 МУТ 25 хв.
-                </div>
-            </div>
-
-            <!-- ЗАБОРОНЕНО -->
-            <div class="block">
-                <h2 style="color:var(--accent)">🚫 Заборонені дії</h2>
-
-                <div class="event">
-                    ✖ Мафія вбиває відкритого суїка<br>
-                    ✖ Повія йде до спаленого слідчого<br>
-                    ✖ Голос за союзника (2/2, 3/3)<br>
-                    🔇 МУТ 30 хв.
-                </div>
-
-                <div class="event">
-                    ➤ Гра в ПП / злив союзників<br>
-                    🔇 МУТ 1 година
-                </div>
-
-                <div class="event">
-                    ➤ Вхід у гру з активним мутом<br>
-                    ⏱ +50 хв до муту
+                <div class="rule-card">
+                    <div class="rule-title">➤ Паління ролей</div>
+                    <div class="rule-desc">Чат / ГЧ / ПП.</div>
+                    <div class="rule-punishment">🔇 МУТ 25 хв.</div>
                 </div>
             </div>
 
-            <!-- ФЕЙКИ -->
-            <div class="block">
-                <h2 style="color:var(--accent)">🧨 Фейки</h2>
+            <div class="rules-section">
+                <h2>🚫 Заборонені дії</h2>
 
-                <div class="event">
-                    🩸 Фейковий акаунт → ❌ Бан
+                <div class="rule-card">
+                    <div class="rule-title">✖ Мафія вбиває відкритого суїка</div>
+                    <div class="rule-desc">Заборонена дія під час гри.</div>
+                    <div class="rule-punishment">🔇 МУТ 30 хв.</div>
                 </div>
 
-                <div class="event">
-                    🩸 Основний акаунт → ⚠️ Варн + Мут 4 год.
+                <div class="rule-card">
+                    <div class="rule-title">✖ Повія йде до спаленого слідчого</div>
+                    <div class="rule-desc">Заборонена нічна дія.</div>
+                    <div class="rule-punishment">🔇 МУТ 30 хв.</div>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-title">✖ Голос за союзника</div>
+                    <div class="rule-desc">Ситуації 2/2 або 3/3.</div>
+                    <div class="rule-punishment">🔇 МУТ 30 хв.</div>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-title">➤ Гра в ПП / злив союзників</div>
+                    <div class="rule-desc">Свідомий підрив своєї сторони.</div>
+                    <div class="rule-punishment">🔇 МУТ 1 година</div>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-title">➤ Вхід у гру з активним мутом</div>
+                    <div class="rule-desc">Покарання додається до поточного муту.</div>
+                    <div class="rule-punishment">⏱ +50 хв до муту</div>
                 </div>
             </div>
 
-            <!-- РЕЖИМ -->
-            <div class="block">
-                <h2 style="color:var(--accent)">🖤 Режим «Без правил»</h2>
+            <div class="rules-section">
+                <h2>🧨 Фейки</h2>
 
-                <div class="event">
-                    ✔ Дозволено: рандом, вбивство союзників
+                <div class="rule-card">
+                    <div class="rule-title">🩸 Фейковий акаунт</div>
+                    <div class="rule-desc">Використання фейка в грі.</div>
+                    <div class="rule-punishment">❌ Бан</div>
                 </div>
 
-                <div class="event">
-                    ❗ Завжди карається: АФК, образи, токсичність
+                <div class="rule-card">
+                    <div class="rule-title">🩸 Основний акаунт</div>
+                    <div class="rule-desc">Покарання за участь у схемі з фейком.</div>
+                    <div class="rule-punishment">⚠️ Варн + Мут 4 год.</div>
                 </div>
             </div>
 
-            <!-- ІВЕНТИ -->
-            <div class="block">
-                <h2 style="color:var(--accent)">🎉 Івенти</h2>
+            <div class="rules-section">
+                <h2>🖤 Режим «Без правил»</h2>
 
-                <div class="event">
-                    🔥 Порушення під час івенту → покарання ×2
+                <div class="rule-card">
+                    <div class="rule-title">✔ Дозволено</div>
+                    <div class="rule-desc">Рандом, вбивство союзників.</div>
+                    <div class="rule-punishment">🟢 Спецрежим</div>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-title">❗ Завжди карається</div>
+                    <div class="rule-desc">АФК, образи, токсичність.</div>
+                    <div class="rule-punishment">🔴 Покарання діє завжди</div>
+                </div>
+            </div>
+
+            <div class="rules-section">
+                <h2>🎉 Івенти</h2>
+
+                <div class="rule-card">
+                    <div class="rule-title">🔥 Порушення під час івенту</div>
+                    <div class="rule-desc">Будь-яке порушення в межах івенту.</div>
+                    <div class="rule-punishment">⚡ Покарання ×2</div>
                 </div>
             </div>
         </div>
