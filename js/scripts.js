@@ -468,18 +468,18 @@ const bots = [
             "шшш"
         ],
 
-        "mur_commands": {
-            "commands": [
-                { "command": "мур", "description": "замурчати" },
-                { "command": "мур @username", "description": "замурчати комусь" },
-                { "command": "мур (reply)", "description": "замурчати у відповідь" },
-                { "command": "хвіст", "description": "виростити або втратити хвіст" }
-            ],
-            "cooldowns": {
-                "mur": "120 секунд на користувача",
-                "tail": "1 раз на годину"
-            }
-        },
+        //"mur_commands": {
+        //    "commands": [
+        //        { "command": "мур", "description": "замурчати" },
+        //        { "command": "мур @username", "description": "замурчати комусь" },
+        //        { "command": "мур (reply)", "description": "замурчати у відповідь" },
+        //        { "command": "хвіст", "description": "виростити або втратити хвіст" }
+        //    ],
+        //    "cooldowns": {
+        //        "mur": "120 секунд на користувача",
+        //        "tail": "1 раз на годину"
+        //    }
+        //},
 
         "deep": {
             "features": [
@@ -493,15 +493,15 @@ const bots = [
 
             "games": [
                 {
-                    "name": "Соціальні ігри (РП)",
-                    "description": "Взаємодія з іншими гравцями"
+                    "name": "Хрестики-Нолики",
+                    "description": "Класична гра 3x3 проти іншого гравця"
                 },
                 {
                     "name": "Мемчики",
                     "description": "Обери найкращий мем під ситуацію"
                 },
                 {
-                    "name": "Смиренні Міні-Ігри 🎲",
+                    "name": "Міні-Ігри 🎲",
                     "description": "Короткі розваги без складної структури"
                 }
             ],
@@ -1231,7 +1231,7 @@ function getBotGameTarget(bot, index) {
         "https://t.me/OfBunkerUA_bot": ["bunker"],
         "https://t.me/codenames_ua_bot": ["codenames"],
         "https://t.me/StarsHelper1_Bot": ["blackjack", "dice"],
-        "https://t.me/gavgames_bot": ["minigames", "memes", "tictactoe"]
+        "https://t.me/gavgames_bot": ["tictactoe", "memes", "minigames"]
     };
 
     return (gameTargets[bot?.link] || [])[index] || "";
