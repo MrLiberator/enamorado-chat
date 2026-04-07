@@ -18,24 +18,171 @@ function openTab(id) {
     tab.style.display = "block";
     tab.classList.add("active");
 
+    if (id === "roles") {
+        resetBotSystems();
+    }
+
     window.scrollTo({
         top: tab.offsetTop - 70,
         behavior: "smooth"
     });
 
 }
+function setExpandableHeight(content, isOpen) {
+    if (!content) {
+        return;
+    }
+
+    content.style.maxHeight = isOpen ? `${content.scrollHeight}px` : "0px";
+}
+function syncExpandablePanels() {
+    document.querySelectorAll(".weekday").forEach(section => {
+        setExpandableHeight(section.querySelector(".day-events"), section.classList.contains("active"));
+    });
+
+    document.querySelectorAll(".event").forEach(card => {
+        setExpandableHeight(card.querySelector(".description"), card.classList.contains("active"));
+    });
+
+    document.querySelectorAll(".role").forEach(card => {
+        setExpandableHeight(card.querySelector(".role-description"), card.classList.contains("active"));
+    });
+
+    document.querySelectorAll(".game-doc-card").forEach(card => {
+        setExpandableHeight(card.querySelector(".game-doc-description"), card.classList.contains("active"));
+    });
+}
 const toggleDay = el => {
-    el.parentElement.classList.toggle("active");
+    const section = el.parentElement;
+    const isOpen = !section.classList.contains("active");
+
+    section.classList.toggle("active", isOpen);
+    setExpandableHeight(section.querySelector(".day-events"), isOpen);
 };
 const toggleEvent = el => {
-    el.classList.toggle("active");
+    const isOpen = !el.classList.contains("active");
+
+    el.classList.toggle("active", isOpen);
+    setExpandableHeight(el.querySelector(".description"), isOpen);
 };
 const toggleRule = el => {
     el.classList.toggle("active");
 };
 const toggleRole = el => {
-    el.classList.toggle("active");
+    const isOpen = !el.classList.contains("active");
+
+    el.classList.toggle("active", isOpen);
+    setExpandableHeight(el.querySelector(".role-description"), isOpen);
 };
+function getGameCards() {
+    return document.querySelectorAll("#games-content .game-doc-card");
+}
+function getGamesFocusState() {
+    return {
+        gamesContent: document.getElementById("games-content"),
+        focusBar: document.querySelector("[data-games-focus-bar]"),
+        focusTitle: document.querySelector("[data-current-game-label]")
+    };
+}
+function scrollGameTarget(target) {
+    if (!target) {
+        return;
+    }
+
+    const top = target.getBoundingClientRect().top + window.scrollY - 92;
+
+    window.scrollTo({
+        top,
+        behavior: "smooth"
+    });
+}
+function showOnlyGame(gameId) {
+    const allGames = getGameCards();
+    const target = document.getElementById(`game-${gameId}`);
+    const { gamesContent, focusBar, focusTitle } = getGamesFocusState();
+
+    allGames.forEach(el => {
+        el.style.display = "block";
+        el.classList.remove("active");
+        setExpandableHeight(el.querySelector(".game-doc-description"), false);
+    });
+
+    if (!target) {
+        showAllGames();
+        return false;
+    }
+
+    target.style.display = "block";
+    target.classList.add("active");
+    setExpandableHeight(target.querySelector(".game-doc-description"), true);
+
+    if (gamesContent) {
+        gamesContent.classList.remove("is-focused");
+    }
+
+    if (focusBar) {
+        focusBar.hidden = true;
+    }
+
+    if (focusTitle) {
+        const gameTitle = target.querySelector(".role-header, .game-doc-header")?.textContent?.trim() || "Гра";
+        focusTitle.textContent = `🕹 ${gameTitle}`;
+    }
+
+    scrollGameTarget(focusBar && !focusBar.hidden ? focusBar : target);
+    return true;
+}
+function showAllGames(shouldScroll = false) {
+    const { gamesContent, focusBar, focusTitle } = getGamesFocusState();
+
+    getGameCards().forEach(el => {
+        el.style.display = "block";
+        el.classList.remove("active");
+        setExpandableHeight(el.querySelector(".game-doc-description"), false);
+    });
+
+    if (gamesContent) {
+        gamesContent.classList.remove("is-focused");
+    }
+
+    if (focusBar) {
+        focusBar.hidden = true;
+    }
+
+    if (focusTitle) {
+        focusTitle.textContent = "";
+    }
+
+    if (shouldScroll && gamesContent) {
+        scrollGameTarget(gamesContent);
+    }
+}
+function setupGameFocusMode() {
+    document.querySelectorAll("#games-content .game-doc-card[data-game]").forEach(card => {
+        if (card.dataset.focusReady === "true") {
+            return;
+        }
+
+        card.addEventListener("click", () => {
+            showOnlyGame(card.dataset.game);
+        });
+
+        card.dataset.focusReady = "true";
+    });
+
+    document.querySelectorAll("[data-show-all-games]").forEach(button => {
+        if (button.dataset.focusReady === "true") {
+            return;
+        }
+
+        button.addEventListener("click", () => {
+            showAllGames(true);
+        });
+
+        button.dataset.focusReady = "true";
+    });
+}
+
 /*анті-школьнік-угон*/
 document.addEventListener("keydown", e => {
     if (
@@ -87,9 +234,1365 @@ document.addEventListener("DOMContentLoaded", () => {
             el.innerText = eventsData[key];
         }
     });
+
+    resetBotSystems();
+    renderBots();
+    setupBotModal();
+    setupGameFocusMode();
+    syncExpandablePanels();
+});
+window.addEventListener("resize", syncExpandablePanels);
+document.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+        closeBotModal();
+    }
 });
 /*Watermark*/
 console.log(
     "%cENAMORADO_DE_UN_SUENO_2026_OFFICIAL_BUILD",
     "color:#d14b5a;font-weight:bold;font-size:14px"
 );
+/*BOT HUB*/
+const bots = [
+    {
+        name: "Мафія",
+        avatar: "assets/MafiaBot.jpg",
+        link: "https://t.me/MafiaUaBot",
+        tagline: "Керує грою від роздачі ролей до визначення переможця",
+        description: "Класична соціальна гра з прихованими ролями, де гравці через обговорення, підозри та голосування намагаються знайти противників. Тут важлива не тільки логіка, а й вміння читати людей.",
+        flow: [
+            "🎭 Кожен отримує приховану роль",
+            "🌙 Вночі ролі виконують свої дії",
+            "☀️ Вдень гравці обговорюють і підозрюють",
+            "🗳 Голосування вирішує, кого вигнати",
+            "🔁 Гра триває до перемоги однієї сторони"
+        ],
+        tips: [
+            "Не поспішай довіряти словам",
+            "Спостерігай за поведінкою",
+            "Брешуть не тільки мафія 😏",
+            "Командна гра вирішує більше, ніж індивідуальна"
+        ],
+        usage: [
+            "🎮 Запустити гру (/game)",
+            "👥 Приєднатися до гри (/join)",
+            "🚪 Вийти з гри (/leave)",
+            "⏱ Переглянути час (/time)",
+            "🛑 Зупинити гру (/stop)",
+            "⏳ Додати час (/extend)",
+            "⚙️ Налаштування (/settings)"
+        ]
+    },
+    {
+        name: "Truth Ukrainian Bot",
+        avatar: "assets/TruthUkrainianBot.jpg",
+        link: "https://t.me/TruthUkrainian_Bot",
+
+        tagline: "Платформа ігор та інтерактиву в чаті",
+
+        description: "Багатофункціональний бот, який об’єднує кілька ігор, систему прогресу та соціальні механіки. Підходить як для швидких розваг, так і для довготривалої активності в чаті.",
+
+        flow: [
+            "🎮 Запускаєш гру",
+            "👥 Гравці приєднуються",
+            "🧩 Обираєте режим",
+            "🔄 Проходить ігровий цикл",
+            "🏆 Отримуєте результат",
+            "🤖 AI-чат (Premium)"
+        ],
+
+        tips: [
+            "Грай не один — бот розкривається в компанії",
+            "Спробуй різні режими",
+            "Рейтинг мотивує повертатись",
+            "Це не одна гра — це система"
+        ],
+
+        // 👇 ХОВАЄМО ПІД КНОПКИ
+
+        deep: {
+            features: [
+                "🎮 Кілька ігор в одному боті",
+                "📊 Глобальна та локальна статистика",
+                "🍉 Міні-гра з кавунчиками",
+                "🃏 Повноцінний UNO",
+                "⚙️ Гнучкі налаштування",
+                "🤖 AI-чат (Premium)"
+            ],
+
+            games: [
+                {
+                    name: "Правда або Дія",
+                    description: "Питання або завдання",
+                },
+                {
+                    name: "Правда або Фейк",
+                    description: "Вгадування фактів",
+                },
+                {
+                    name: "Хто Я?",
+                    description: "Вгадування персонажа",
+                },
+                {
+                    name: "UNO",
+                    description: "Карткова гра з режимами",
+                }
+            ],
+
+            extra: [
+                "🍉 Кавунчики",
+                "📈 Рейтинг",
+                "🌍 Глобальна статистика",
+                "👑 Premium"
+            ],
+
+            usage: [
+                "🎮 Відкрити меню ігор (/gmstart)",
+                "🤖 Написати AI (тру ботик)",
+                "👥 Приєднатися до гри (/gmjoin)",
+                "🚪 Вийти з гри (/gmleave)",
+                "🛑 Зупинити гру (/gmstop)",
+                "📊 Переглянути статистику (/truthstats)",
+                "👤 Відкрити профіль (/truthprofile)",
+                "⚙️ Налаштування (/truthsettings)",
+                "🍉 Відкрити кавунчики (/mykavun)"
+            ]
+        }
+    },
+    {
+        name: "Bunker | TruthUk",
+        avatar: "assets/BunkerUKR.jpg",
+        link: "https://t.me/OfBunkerUA_bot",
+
+        tagline: "Соціальна гра на виживання та переконання",
+
+        description: "Гра, де рішення приймають не правила, а люди. Кожен гравець отримує випадкову роль і характеристики та повинен довести, що саме він заслуговує місце в бункері після апокаліпсису.",
+
+        flow: [
+            "🎲 Генерується сценарій апокаліпсису",
+            "👤 Гравці отримують характеристики",
+            "🔓 Відкривається інформація про себе",
+            "💬 Обговорення та переконання",
+            "🗳 Голосування і виключення",
+            "🔄 Раунди повторюються до фіналу"
+        ],
+
+        tips: [
+            "Говори впевнено — навіть слабку роль можна продати",
+            "Не відкривай усе одразу",
+            "Слухай інших — слабкі аргументи видають",
+            "Гра виграється словами, а не характеристиками",
+            "Іноді краще виглядати корисним, ніж бути ним 😏"
+        ],
+
+        // 👇 ХОВАЄМО ПІД КНОПКИ
+
+        deep: {
+            features: [
+                "🎲 Випадкові ролі та характеристики",
+                "🌍 Динамічні сценарії апокаліпсису",
+                "🧠 Соціальна стратегія та логіка",
+                "💬 Живе обговорення між гравцями",
+                "🗳 Система голосування",
+                "⏱ Таймінги та автоматизація ботом"
+            ],
+
+            games: [
+                {
+                    name: "Класичний Bunker",
+                    description: "Соціальна гра з вибуванням та обговоренням"
+                }
+            ],
+
+            extra: [
+                "📊 Неповна інформація",
+                "⚖️ Вибір що і коли відкривати",
+                "🎯 Сильна роль не гарантує перемогу",
+                "🔥 Тиск на активність гравців"
+            ],
+
+            usage: [
+                "🎮 Запустити гру (/game)",
+                "👥 Приєднатися (/join)",
+                "🚪 Вийти (/leave)",
+                "⏳ Продовжити набір (/extend)",
+                "🛑 Зупинити гру (/stop)",
+                "⏸ Пауза (/pause)",
+                "▶️ Продовжити (/resume)",
+                "⚙️ Налаштування (/settings)",
+                "👢 Кікнути гравця (адмін) (/kick)"
+            ]
+        }
+    },
+    {
+        "name": "Koтik | TruthUk",
+        "avatar": "assets/KotykUKR.jpg",
+        "link": "https://t.me/gavgames_bot",
+
+        "tagline": "Соціальний бот для фанового життя чату",
+
+        "description": "Багатофункціональний чат-бот, який поєднує ігри, рольову взаємодію та AI-асистента. Його головна мета — зробити спілкування в чаті більш живим, емоційним і інтерактивним.",
+
+        "flow": [
+            "💬 Взаємодієш з ботом у чаті",
+            "🎮 Запускаєш гру або активність",
+            "👥 Інші гравці підключаються",
+            "🔄 Відбувається взаємодія (ходи / RP / реакції)",
+            "🏁 Отримуєте результат або фан"
+        ],
+
+        "tips": [
+            "Використовуй бота в активному чаті — він розкривається через людей",
+            "Не обмежуйся іграми — спробуй RP і соціальні функції",
+            "Експериментуй — тут багато неочевидних механік",
+            "Більше взаємодії = більше фану",
+            "Це не бот-команда, це частина атмосфери чату 😺"
+        ],
+
+        "rp_commands": [
+            "бу",
+            "вдарити",
+            "вилизати",
+            "виїбати",
+            "дроч",
+            "мяу",
+            "нагодувати",
+            "обійняти",
+            "погладити",
+            "покусати",
+            "поцілувати",
+            "притиснути",
+            "трахнути",
+            "цьом",
+            "чай",
+            "шшш"
+        ],
+
+        "mur_commands": {
+            "commands": [
+                { "command": "мур", "description": "замурчати" },
+                { "command": "мур @username", "description": "замурчати комусь" },
+                { "command": "мур (reply)", "description": "замурчати у відповідь" },
+                { "command": "хвіст", "description": "виростити або втратити хвіст" }
+            ],
+            "cooldowns": {
+                "mur": "120 секунд на користувача",
+                "tail": "1 раз на годину"
+            }
+        },
+
+        "deep": {
+            "features": [
+                "🎮 Різні типи ігор",
+                "💬 RP та соціальні команди",
+                "🤖 AI-спілкування та відповіді",
+                "📊 Рейтинги та профілі",
+                "🌿 Внутрішня економіка",
+                "⚙️ Адмін-налаштування"
+            ],
+
+            "games": [
+                {
+                    "name": "Соціальні ігри (РП)",
+                    "description": "Взаємодія з іншими гравцями"
+                },
+                {
+                    "name": "Мемчики",
+                    "description": "Обери найкращий мем під ситуацію"
+                },
+                {
+                    "name": "Смиренні Міні-Ігри 🎲",
+                    "description": "Короткі розваги без складної структури"
+                }
+            ],
+
+            "extra": [
+                "💕 RP-взаємодія між гравцями",
+                "💍 Система шлюбів",
+                "🤖 AI-пам’ять та діалоги",
+                "⏰ Нагадування та допомога",
+                "👤 Профіль гравця",
+                "🌍 Активність у чаті як центр всього"
+            ],
+
+            "usage": [
+                "🚀 Відкрити меню (/start)",
+                "👤 Відкрити профіль (/profile)",
+                "🏆 Переглянути топ (/top)",
+                "💬 Переглянути топ чату (/topchat)",
+                "⚙️ Відкрити налаштування (/settings)",
+                "💎 AI преміум (/prem)",
+
+                "🎮 Почати гру (/newgame)",
+                "⛔ Зупинити гру (/stopcat)",
+                "⚡ Швидко зупинити гру (/nax)",
+                "🚪 Вийти з гри (/leave)",
+
+                "💍 Шлюб (/marriage)",
+                "⏰ Нагадування (/reminders)",
+
+                "💕 Взаємодія з гравцями (RP-команди)",
+                "😼 Соціальні реакції (мур, хвіст)",
+
+                "🎰 Відкрити казино (Казино сума*)"
+            ]
+        }
+    },
+    {
+        name: "Кеш-Бос",
+        avatar: "assets/CashBoss.jpg",
+        link: "https://t.me/StarsHelper1_Bot",
+
+        tagline: "Економіка та валюта всередині чату",
+
+        description: "Telegram-бот, який додає в чат повноцінну економічну систему: користувачі заробляють валюту за активність, витрачають її в магазині та можуть ризикувати в азартних іграх для швидкого прибутку або втрат.",
+
+        flow: [
+            "💬 Спілкуєшся в чаті та отримуєш валюту",
+            "🎮 Береш участь в іграх або івентах",
+            "💰 Заробляєш і накопичуєш коїни",
+            "🛒 Витрачаєш у магазині або взаємодієш з іншими",
+            "📈 Зростаєш у рейтингу багатих гравців"
+        ],
+
+        tips: [
+            "Не тримай всі гроші — ризик може як підняти, так і обнулити",
+            "Активність у чаті — стабільніший дохід, ніж азарт",
+            "Використовуй економіку розумно — це ще й вплив",
+            "Передавай валюту — це створює зв’язки",
+            "Blackjack — це швидкий шлях або в топ, або в нуль 😏"
+        ],
+
+        // 👇 ХОВАЄМО ПІД КНОПКИ
+
+        deep: {
+            features: [
+                "💰 Внутрішня валюта (коїни)",
+                "📈 Рейтинг найбагатших гравців",
+                "🛒 Магазин з різними типами покупок",
+                "🎮 Ігрові механіки для заробітку",
+                "🔁 Передача валюти між гравцями",
+                "⚙️ Інтеграція з чат-активністю"
+            ],
+
+            games: [
+                {
+                    name: "Blackjack",
+                    description: "Карткова гра на ставку проти бота"
+                },
+                {
+                    name: "Кубик",
+                    description: "Підкидання кубика"
+                },
+            ],
+
+            extra: [
+                "🎭 Соціальні бонуси (статуси, префікси)",
+                "⚖️ Вплив на модерацію через економіку",
+                "🕵️ Анонімні взаємодії",
+                "💸 Донат або купівля валюти",
+                "🌍 Економіка як центр взаємодії"
+            ],
+
+            usage: [
+                "💰 Переглянути баланс (/me)",
+                "🃏 Грати в Blackjack (/bj)",
+                "🛒 Відкрити магазин (/shop)",
+                "💸 Передати коїни (/give_coins)",
+                "🏆 Переглянути топ багатих (/top_rich)",
+                "📊 Відкрити профіль (/start)",
+                "🎲 Кинути кубик (кубик)"
+            ]
+        }
+    },
+    {
+        name: "Кодові імена",
+        avatar: "assets/CodenamesBot.jpg",
+        link: "https://t.me/codenames_ua_bot", // якщо інший — заміниш
+
+        tagline: "Командна гра на асоціації та синергію",
+
+        description: "Командна гра, де один гравець дає асоціації, а інші намагаються знайти правильні слова серед багатьох варіантів. Перемагає команда, яка краще розуміє одне одного та уникає критичних помилок.",
+
+        flow: [
+            "👥 Гравці діляться на команди",
+            "🧩 Генерується поле зі словами",
+            "🧠 Один дає підказку (слово + число)",
+            "💬 Команда обговорює варіанти",
+            "🎯 Вибір слів на полі",
+            "🔄 Хід переходить до іншої команди"
+        ],
+
+        tips: [
+            "Думай як твоя команда, а не як ти",
+            "Одна хороша асоціація може вирішити гру",
+            "Не жадничай — більше слів = більше ризику",
+            "Слухай логіку інших гравців",
+            "Іноді найочевидніше — це пастка 😏"
+        ],
+
+        // 👇 ХОВАЄМО ПІД КНОПКИ
+
+        deep: {
+            features: [
+                "🧠 Асоціативний геймплей",
+                "👥 Командна взаємодія",
+                "🎯 Ризик та стратегія вибору",
+                "🧩 Генерація ігрового поля",
+                "🤖 Автоматичне ведення гри",
+                "⚙️ Гнучкість режимів"
+            ],
+
+            games: [
+                {
+                    name: "Класичний режим",
+                    description: "Командна гра з підказками та відгадуванням"
+                }
+            ],
+
+            extra: [
+                "🔍 Неповна інформація для гравців",
+                "⚖️ Баланс між ризиком і точністю",
+                "🧠 Інтерпретація підказок",
+                "👥 Синергія команди",
+                "🚫 Обмеження на підказки"
+            ],
+
+            usage: [
+                "🎮 Запустити гру (/game)",
+                "👥 Приєднатися до команди (/join)",
+                "🚪 Вийти з гри (/leave)",
+                "💡 Дати підказку (/hint)",
+                "🎯 Обрати слово (/pick)",
+                "⚙️ Налаштування (/settings)"
+            ]
+        }
+    },
+    {
+        name: "Crocodile",
+        avatar: "assets/KrokoBot.jpg",
+        link: "https://t.me/croco_ua_bot", // якщо інший — заміниш
+
+        tagline: "Швидкі ігри на реакцію та відгадування",
+
+        description: "Telegram-бот для динамічних групових ігор, де все вирішує швидкість, уважність і реакція. Бот виступає як автоматичний ведучий, генерує завдання та миттєво визначає переможців у кожному раунді.",
+
+        flow: [
+            "🎮 Обираєш режим (/w, /math, /flags)",
+            "🤖 Бот генерує завдання",
+            "⌨️ Гравці відповідають у чаті",
+            "⚡ Хто перший — той отримує очки",
+            "🔄 Починається наступний раунд",
+            "🏆 Формується рейтинг"
+        ],
+
+        tips: [
+            "Швидкість важливіша за ідеальність",
+            "Пиши коротко — це економить секунди",
+            "Слідкуй за таймером",
+            "Чим більше раундів — тим більше шансів вирватись в топ",
+            "Це гра не про знання, а про реакцію ⚡"
+        ],
+
+        // 👇 ХОВАЄМО ПІД КНОПКИ
+
+        deep: {
+            features: [
+                "⚡ Швидкі раундові ігри",
+                "🤖 Автоматичний ведучий",
+                "📊 Локальна статистика чатів",
+                "🏆 Рейтинг гравців",
+                "⚙️ Налаштування для адміністраторів",
+                "💬 Соціальні механіки (шлюби)"
+            ],
+
+            games: [
+                {
+                    name: "Крокодил",
+                    description: "Вгадування слова за описом"
+                },
+                {
+                    name: "Математика",
+                    description: "Рішення прикладів на швидкість"
+                },
+                {
+                    name: "Прапори",
+                    description: "Вгадування країн за прапором"
+                }
+            ],
+
+            extra: [
+                "📈 Топ гравців і чатів",
+                "⏱ Динамічні таймери",
+                "🎯 Різні типи завдань",
+                "💍 Система шлюбів",
+                "🔁 Безперервні раунди"
+            ],
+
+            usage: [
+                "🐊 Запустити гру зі словами (/w)",
+                "🧠 Запустити математику (/math)",
+                "🌍 Запустити прапори (/flags)",
+                "📊 Переглянути статистику (/stats)",
+                "🏆 Переглянути топ (/top)",
+                "⚙️ Налаштування (/ksettings)"
+            ]
+        }
+    },
+    {
+        name: "Sunflower Stats",
+        avatar: "assets/SoniashnykBot.jpg",
+        link: "https://t.me/soniashnyk_statistics_bot",
+
+        tagline: "Аналітика та статистика для чатів",
+
+        description: "Бот для збору, обробки та візуалізації даних у чаті. Перетворює активність або результати в зрозумілі звіти, рейтинги та таблиці.",
+
+        flow: [
+            "📥 Збираються дані з чату або ігор",
+            "🧠 Обробка та агрегація",
+            "📊 Генерація статистики",
+            "📄 Формування звітів",
+            "📤 Вивід у зручному форматі"
+        ],
+
+        tips: [
+            "Чим більше даних — тим цікавіша аналітика",
+            "Використовуй для відстеження активності",
+            "Рейтинги добре мотивують користувачів",
+            "Експорт допомагає працювати з даними поза Telegram"
+        ],
+
+        deep: {
+            features: [
+                "📊 Збір статистики",
+                "📈 Рейтинги та метрики",
+                "📄 Генерація звітів",
+                "📤 Експорт (CSV / таблиці)",
+                "🧠 Агрегація даних"
+            ],
+
+            games: [],
+
+            extra: [
+                "🧮 Середні значення",
+                "📊 Табличний формат",
+                "🌍 Локальна аналітика чату"
+            ],
+
+            usage: [
+                "📊 Переглянути свою статистику (!йа)",
+                "👤 Переглянути статистику гравця (!ти)",
+                "📈 Переглянути статистику чату (Стата)",
+                "🏆 Переглянути топ чату (Стата вся)",
+                "📅 Статистика за тиждень (Стата тиждень)",
+                "📆 Статистика за місяць (Стата місяць)",
+                "⚙️ Налаштування (/settings)"
+            ]
+        }
+    },
+    //{
+    //    name: "BloodNexus | Bot",
+    //    link: "https://t.me/bloodnexus_bot",
+    //    type: "social",
+    //    tagline: "RP, взаємодія та адміністрування",
+    //    description: "Бот для рольової взаємодії, соціальних механік та управління чатом.",
+    //    flow: [
+    //        "🎭 Використання RP-команд",
+    //        "💬 Взаємодія між гравцями",
+    //        "⚙️ Адмін-функції",
+    //        "📊 Контроль активності",
+    //        "🔁 Постійна соціальна динаміка"
+    //    ],
+    //    tips: [
+    //        "Працює через reply",
+    //        "RP = основа бота",
+    //        "Комбінуй з іншими ботами",
+    //        "Добре заходить у активних чатах"
+    //    ]
+    //},
+    //{
+    //    name: "Luci",
+    //    link: "https://t.me/liutsyk_bot",
+    //    type: "social",
+    //    tagline: "Соціалка, економіка та фан",
+    //    description: "Бот, який поєднує внутрішню валюту, соціальні механіки та ігри між чатами.",
+    //    flow: [
+    //        "💰 Отримуєш валюту",
+    //        "💬 Взаємодієш з іншими",
+    //        "💍 Соціальні функції (шлюби)",
+    //        "🎮 Ігри та активності",
+    //        "🌐 Міжчатова взаємодія"
+    //    ],
+    //    tips: [
+    //        "'Гріши' регулярно",
+    //        "Соціалка важливіша за гроші",
+    //        "Використовуй взаємодію з людьми",
+    //        "Бот розкривається в активних чатах"
+    //    ],
+    //    usage: [
+          //  "🎮 Start a new game (/newgame)",
+          //  "👥 Join interactions (/join)",
+          //  "🚪 Leave activity (/leave)",
+          //  "💍 Create relationship (/marriage)",
+          //  "🔮 Make prediction (/prediction)",
+          //  "🎰 Play casino (/casino)",
+          //  "🌦 Check weather (/weather)",
+          //  "⚙️ Open settings (/settings)"
+          //]
+    //},
+    //{
+    //    name: "Rose",
+    //    avatar: "assets/MissRoseBot.jpg",
+    //    link: "https://t.me/MissRose_bot",
+
+    //    tagline: "Потужна система модерації чату",
+
+    //    description: "Один із найпопулярніших модераційних ботів, який автоматизує контроль за чатом: від антиспаму до складних систем правил і санкцій.",
+
+    //    flow: [
+    //        "👀 Моніторинг повідомлень",
+    //        "⚠️ Виявлення порушень",
+    //        "🔧 Застосування правил",
+    //        "🚫 Санкції (mute / ban / warn)",
+    //        "📊 Фіксація в системі"
+    //    ],
+
+    //    tips: [
+    //        "Налаштуй фільтри під свій чат",
+    //        "Не роби правила занадто жорсткими",
+    //        "Слідкуй за false positives",
+    //        "Використовуй warns як м’яку систему контролю"
+    //    ],
+
+    //    deep: {
+    //        features: [
+    //            "🛡 Антиспам і антифлуд",
+    //            "🤖 Автоматична модерація",
+    //            "📋 Система попереджень",
+    //            "🔍 Regex-фільтри",
+    //            "⚙️ Персональні налаштування чату"
+    //        ],
+
+    //        games: [],
+
+    //        extra: [
+    //            "👮 Ролі (admin / moderator / user)",
+    //            "🧠 Stateful логіка",
+    //            "📊 Збереження порушень",
+    //            "⚠️ Обробка рейдів"
+    //        ],
+
+    //        commands: [
+    //            "/warn",
+    //            "/mute",
+    //            "/ban",
+    //            "/kick",
+    //            "/filters"
+    //        ]
+    //    }
+    //},
+    {
+        name: "Szczekacz",
+        avatar: "assets/ZazyvalaBot.jpg",
+        link: "https://t.me/zazyvalabot",
+
+        tagline: "Інструмент для росту та залучення аудиторії",
+
+        description: "Бот для просування чатів через інвайти, парсинг аудиторії та розсилки. Орієнтований на швидке масштабування спільнот.",
+
+        flow: [
+            "🔍 Збір аудиторії",
+            "📥 Парсинг користувачів",
+            "📨 Масові інвайти або повідомлення",
+            "📈 Ріст чату"
+        ],
+
+        tips: [
+            "Не зловживай — ризик блокування високий",
+            "Краще комбінувати з органічним ростом",
+            "Перевіряй якість аудиторії",
+            "Використовуй обережно"
+        ],
+
+        deep: {
+            features: [
+                "📨 Масові інвайти",
+                "🔍 Парсинг користувачів",
+                "📢 Розсилки",
+                "⚙️ Автоматизація залучення"
+            ],
+
+            games: [],
+
+            extra: [
+                "⚠️ Ризик бану акаунта",
+                "🚫 Може порушувати ToS",
+                "🤖 Часто використовує userbot"
+            ],
+
+            usage: [
+                "📨 Запустити інвайти (/invite)",
+                "🔍 Запустити парсинг (/parse)",
+                "📢 Запустити розсилку (/broadcast)",
+                "⚙️ Налаштування (/settings)"
+            ]
+        }
+    },
+    {
+        name: "QuotLy",
+        avatar: "assets/QuotLyBot.png",
+        link: "https://t.me/QuotLyBot",
+
+        tagline: "Перетворює повідомлення в стильні цитати",
+
+        description: "Бот, який створює красиві зображення з повідомлень, зберігаючи стиль месенджера або застосовуючи кастомні теми.",
+
+        flow: [
+            "💬 Відповідаєш на повідомлення",
+            "📥 Бот отримує текст і дані",
+            "🎨 Генерує стилізоване зображення",
+            "📤 Надсилає результат"
+        ],
+
+        tips: [
+            "Використовуй короткі повідомлення для кращого вигляду",
+            "Експериментуй зі стилями",
+            "Добре підходить для мемів і цитат",
+            "Emoji можуть впливати на вигляд"
+        ],
+
+        deep: {
+            features: [
+                "🖼 Генерація зображень з тексту",
+                "🎨 Різні стилі (Telegram, iMessage)",
+                "💬 Робота через відповідь на повідомлення",
+                "⚙️ Кастомізація (колір, emoji)"
+            ],
+
+            games: [],
+
+            extra: [
+                "🧠 Парсинг повідомлення",
+                "👤 Витяг імені та аватара",
+                "⚠️ Обмеження довжини тексту"
+            ],
+
+            usage: [
+                "💬 Відповісти на повідомлення",
+                "🎨 Створити цитату (/q)",
+                "⚙️ Налаштування стилю (/settings)",
+                "🌈 Змінити кольори (/color)"
+            ]
+        }
+    },
+    {
+        name: "USaver",
+        avatar: "assets/UASaverBot.jpg",
+        link: "https://t.me/uasaverbot",
+
+        tagline: "Завантаження медіа з популярних платформ",
+
+        description: "Бот, який дозволяє швидко завантажувати відео та аудіо з різних платформ, просто надіславши посилання.",
+
+        flow: [
+            "🔗 Надсилаєш посилання",
+            "🤖 Бот визначає платформу",
+            "⏳ Обробка",
+            "📤 Отримуєш файл або варіанти"
+        ],
+
+        tips: [
+            "Використовуй короткі відео для швидшого результату",
+            "Не всі відео можна скачати (приватні)",
+            "Якість може впливати на розмір",
+            "MP3 зручно для музики"
+        ],
+
+        deep: {
+            features: [
+                "📥 Завантаження відео",
+                "🎵 Конвертація в MP3",
+                "🌍 Підтримка кількох платформ",
+                "⚙️ Автовизначення URL"
+            ],
+
+            games: [],
+
+            extra: [
+                "⚠️ Ліміт Telegram (~50MB)",
+                "🚫 DRM обмеження",
+                "🧠 Використання downloader-інструментів"
+            ],
+
+            commands: [
+                "/start",
+                "/help"
+            ]
+        }
+    },
+    {
+        name: "MusicSearch",
+        avatar: "assets/MusicSearchBot.jpg",
+        link: "https://t.me/music_search_ua_bot",
+
+        tagline: "Пошук і відправка музики прямо в чат",
+
+        description: "Бот для швидкого пошуку музики та отримання треків у чаті через команди або інлайн-режим.",
+
+        flow: [
+            "🔎 Вводиш назву треку",
+            "📋 Отримуєш список результатів",
+            "🎵 Обираєш потрібний",
+            "📤 Отримуєш файл"
+        ],
+
+        tips: [
+            "Пиши 'artist - track' для точності",
+            "Інлайн-режим швидший у чаті",
+            "Перевіряй дублікати",
+            "Якість може відрізнятись"
+        ],
+
+        deep: {
+            features: [
+                "🔎 Пошук музики",
+                "🎵 Відправка MP3",
+                "⚡ Інлайн-режим",
+                "📂 Робота з різними джерелами"
+            ],
+
+            games: [],
+
+            extra: [
+                "🌍 Джерела: YouTube, SoundCloud",
+                "⚠️ Обмеження через авторські права",
+                "🔁 Можливі дублікати"
+            ],
+
+            usage: [
+                "🔎 Знайти музику (/search)",
+                "🎵 Обрати трек зі списку",
+                "📥 Отримати аудіо",
+                "⚡ Використовувати інлайн-режим"
+            ]
+        }
+    },
+];
+const defaultBotDeep = {
+    "https://t.me/MafiaUaBot": {
+        games: [
+            {
+                name: "Класична Мафія",
+                description: "Соціальна гра з прихованими ролями, нічними діями та денним голосуванням."
+            },
+            {
+                name: "Івент-сценарії",
+                description: "Спеціальні режими з окремими умовами, ритмом і додатковим тиском на гравців."
+            }
+        ]
+    }
+};
+const requiredBotSections = ["description", "flow", "tips"];
+// Каталог ботів зараз показує лише ці deep-секції, решта редакторських полів не потрапляє в UI.
+const supportedBotDeepKeys = ["games", "usage"];
+let activeSection = null;
+const botCatalog = bots
+    .map((bot, index) => normalizeBot(bot, index))
+    .filter(Boolean);
+function normalizeBotDeep(deep) {
+    if (!deep || typeof deep !== "object") {
+        return null;
+    }
+
+    const sanitizedDeep = Object.fromEntries(
+        supportedBotDeepKeys.map(key => [key, deep[key]])
+    );
+
+    const normalizedGames = Array.isArray(sanitizedDeep.games)
+        ? sanitizedDeep.games
+            .map(item => {
+                if (!item || typeof item !== "object") {
+                    return null;
+                }
+
+                const title = typeof item.title === "string"
+                    ? item.title.trim()
+                    : typeof item.name === "string"
+                        ? item.name.trim()
+                        : "";
+                const description = typeof item.desc === "string"
+                    ? item.desc.trim()
+                    : typeof item.description === "string"
+                        ? item.description.trim()
+                        : "";
+
+                if (!title || !description) {
+                    return null;
+                }
+
+                return { title, description };
+            })
+            .filter(Boolean)
+        : [];
+
+    const normalized = {
+        games: normalizedGames,
+        usage: Array.isArray(sanitizedDeep.usage) ? sanitizedDeep.usage.map(item => String(item).trim()).filter(Boolean) : []
+    };
+
+    return Object.values(normalized).some(items => items.length) ? normalized : null;
+}
+function normalizeBot(bot, index) {
+    const requiredTopLevel = ["name", "avatar", ...requiredBotSections];
+    const missingTopLevel = requiredTopLevel.filter(key => !(key in bot));
+
+    if (missingTopLevel.length) {
+        console.error(`Bot at index ${index} is missing fields: ${missingTopLevel.join(", ")}`);
+        return null;
+    }
+
+    const invalidListField = requiredBotSections
+        .filter(key => key !== "description")
+        .find(key => !Array.isArray(bot[key]) || bot[key].length === 0);
+
+    if (typeof bot.description !== "string" || !bot.description.trim() || invalidListField) {
+        console.error(`Bot "${bot.name || index}" has an invalid required structure.`);
+        return null;
+    }
+
+    const botLink = typeof bot.link === "string" ? bot.link.trim() : "";
+    const mergedDeep = {
+        ...(defaultBotDeep[botLink] || {}),
+        ...(bot.deep && typeof bot.deep === "object" ? bot.deep : {})
+    };
+
+    if (Array.isArray(bot.usage) && bot.usage.length && (!Array.isArray(mergedDeep.usage) || !mergedDeep.usage.length)) {
+        mergedDeep.usage = bot.usage;
+    }
+
+    return {
+        name: String(bot.name).trim(),
+        avatar: String(bot.avatar).trim(),
+        link: botLink,
+        tagline: typeof bot.tagline === "string" ? bot.tagline.trim() : "",
+        description: bot.description.trim(),
+        flow: bot.flow.map(item => String(item).trim()).filter(Boolean),
+        tips: bot.tips.map(item => String(item).trim()).filter(Boolean),
+        deep: normalizeBotDeep(mergedDeep)
+    };
+}
+function escapeHtml(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+}
+function renderBotList(items) {
+    return items
+        .map(item => `<li>${escapeHtml(item)}</li>`)
+        .join("");
+}
+function renderBotUsageItem(item) {
+    const value = String(item).trim();
+    const dashMatch = value.match(/^(.*?)(\s-\s.+)$/);
+
+    if (dashMatch) {
+        return `
+            <span class="bot-usage-label">${escapeHtml(dashMatch[1].trim())}</span>
+            <span class="bot-usage-action">${escapeHtml(dashMatch[2].trim())}</span>
+        `;
+    }
+
+    const commandMatch = value.match(/^(.*?)(\s\((\/[^)]+)\))$/);
+
+    if (commandMatch) {
+        return `
+            <span class="bot-usage-label">${escapeHtml(commandMatch[1].trim())}</span>
+            <span class="bot-usage-action">${escapeHtml(commandMatch[2].trim())}</span>
+        `;
+    }
+
+    return `<span class="bot-usage-label">${escapeHtml(value)}</span>`;
+}
+function renderBotUsageList(items) {
+    return `
+        <ul class="bot-usage-list">
+            ${items.map(item => `<li class="bot-usage-item">${renderBotUsageItem(item)}</li>`).join("")}
+        </ul>
+    `;
+}
+function getBotGameTarget(bot, index) {
+    const gameTargets = {
+        "https://t.me/MafiaUaBot": ["mafia", "events-archive"],
+        "https://t.me/TruthUkrainian_Bot": ["truth-dare", "truth-fake", "who-am-i", "uno"],
+        "https://t.me/OfBunkerUA_bot": ["bunker"],
+        "https://t.me/codenames_ua_bot": ["codenames"],
+        "https://t.me/StarsHelper1_Bot": ["blackjack", "dice"],
+        "https://t.me/gavgames_bot": ["minigames", "memes", "tictactoe"]
+    };
+
+    return (gameTargets[bot?.link] || [])[index] || "";
+}
+function openEventsArchive() {
+    const eventsTab = document.getElementById("events");
+
+    closeBotModal();
+    openTab("events");
+
+    if (!eventsTab) {
+        return;
+    }
+
+    window.setTimeout(() => {
+        const top = eventsTab.getBoundingClientRect().top + window.scrollY - 92;
+
+        window.scrollTo({
+            top,
+            behavior: "smooth"
+        });
+    }, 220);
+}
+function getBotDeepSections(bot) {
+    if (!bot?.deep) {
+        return [];
+    }
+
+    return [
+        { key: "games", label: "🎮 Ігри", items: bot.deep.games },
+        { key: "usage", label: "⚡ Як користуватись", items: bot.deep.usage }
+    ].filter(section => Array.isArray(section.items) && section.items.length > 0);
+}
+function buildBotDeepActions(bot) {
+    const sections = getBotDeepSections(bot);
+
+    if (!sections.length) {
+        return "";
+    }
+
+    return `
+        <section class="bot-modal-section bot-modal-deep">
+            <h3>⚡ ДОДАТКОВО</h3>
+            <div class="bot-deep-actions" data-count="${sections.length}">
+                ${sections.map(section => `
+                    <button class="bot-deep-toggle" type="button" data-deep-section="${section.key}">
+                        ${section.label}
+                    </button>
+                `).join("")}
+            </div>
+            <div class="bot-deep-content hidden" data-bot-deep-content></div>
+        </section>
+    `;
+}
+function renderBotDeepSection(bot, section) {
+    if (!bot?.deep) {
+        return "";
+    }
+
+    switch (section) {
+        case "games":
+            if (!bot.deep.games.length) {
+                return "";
+            }
+
+            return `
+                <div class="bot-game-grid">
+                    ${bot.deep.games.map((game, index) => {
+                        const gameTarget = getBotGameTarget(bot, index);
+
+                        return `
+                        <div class="bot-game-card${gameTarget ? " bot-game-card-link" : ""}"${gameTarget ? ` data-game="${gameTarget}"` : ""}>
+                            <div class="bot-game-title">${escapeHtml(game.title)}</div>
+                            <div class="bot-game-desc">${escapeHtml(game.description)}</div>
+                        </div>
+                    `;
+                    }).join("")}
+                </div>
+            `;
+
+        case "usage":
+            return bot.deep.usage.length
+                ? renderBotUsageList(bot.deep.usage)
+                : "";
+
+        default:
+            return "";
+    }
+}
+function toggleBotDeepSection(section) {
+    const modal = document.getElementById("botModal");
+    const modalBody = document.getElementById("botModalBody");
+    const deepContent = modalBody?.querySelector("[data-bot-deep-content]");
+    const deepButtons = modalBody?.querySelectorAll("[data-deep-section]") || [];
+    const botIndex = Number(modal?.dataset.botIndex);
+    const bot = Number.isInteger(botIndex) ? botCatalog[botIndex] : null;
+
+    if (!bot || !deepContent) {
+        return;
+    }
+
+    const isCollapsing = activeSection === section && !deepContent.classList.contains("hidden");
+
+    deepButtons.forEach(button => {
+        button.classList.toggle("is-active", !isCollapsing && button.dataset.deepSection === section);
+    });
+
+    if (isCollapsing) {
+        deepContent.innerHTML = "";
+        deepContent.classList.add("hidden");
+        deepContent.classList.remove("is-visible");
+        activeSection = null;
+        return;
+    }
+
+    const markup = renderBotDeepSection(bot, section);
+
+    if (!markup) {
+        deepContent.innerHTML = "";
+        deepContent.classList.add("hidden");
+        deepContent.classList.remove("is-visible");
+        activeSection = null;
+        return;
+    }
+
+    deepContent.innerHTML = markup;
+    deepContent.classList.remove("hidden");
+    deepContent.classList.remove("is-visible");
+    void deepContent.offsetWidth;
+    deepContent.classList.add("is-visible");
+    activeSection = section;
+}
+function buildBotSystems(bot) {
+    if (bot.link !== "https://t.me/MafiaUaBot") {
+        return "";
+    }
+
+    return `
+        <section class="bot-modal-section bot-modal-systems">
+            <h3>🎮 ІГРОВІ СИСТЕМИ</h3>
+            <div class="bot-system-links">
+                <button class="bot-system-link" type="button" data-system-target="roles">
+                    <span class="bot-system-link-title">🎭 Ролі</span>
+                    <span class="bot-system-link-copy">Дивись всі ролі та їх здібності</span>
+                </button>
+                <button class="bot-system-link" type="button" data-system-target="buffs">
+                    <span class="bot-system-link-title">💥 Бафи</span>
+                    <span class="bot-system-link-copy">Дивись доступні бафи та ефекти</span>
+                </button>
+            </div>
+        </section>
+    `;
+}
+function buildBotModal(bot) {
+    const botTitle = bot.link
+        ? `<a class="bot-modal-link" href="${escapeHtml(bot.link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(bot.name)}</a>`
+        : escapeHtml(bot.name);
+
+    return `
+        <div class="bot-modal-hero">
+            <img class="bot-modal-avatar" src="${escapeHtml(bot.avatar)}" alt="${escapeHtml(bot.name)}">
+            <div class="bot-modal-title-block">
+                <h2 id="botModalTitle" class="bot-modal-title">${botTitle}</h2>
+            </div>
+        </div>
+
+        <section class="bot-modal-section bot-modal-description">
+            <h3>🧾 ОПИС</h3>
+            <p>${escapeHtml(bot.description)}</p>
+        </section>
+
+        <section class="bot-modal-section">
+            <h3>🎮 ЯК ПРОХОДИТЬ ГРА</h3>
+            <ul class="bot-modal-list">${renderBotList(bot.flow)}</ul>
+        </section>
+
+        <section class="bot-modal-section">
+            <h3>💡 ПОРАДИ</h3>
+            <ul class="bot-modal-list">${renderBotList(bot.tips)}</ul>
+        </section>
+
+        ${buildBotDeepActions(bot)}
+        ${buildBotSystems(bot)}
+    `;
+}
+function renderBots() {
+    const grid = document.getElementById("botsGrid");
+
+    if (!grid) {
+        return;
+    }
+
+    grid.innerHTML = botCatalog.map((bot, index) => `
+        <button class="bot-card" type="button" data-bot-index="${index}" aria-label="Відкрити опис бота ${escapeHtml(bot.name)}">
+            <img class="bot-card-avatar" src="${escapeHtml(bot.avatar)}" alt="${escapeHtml(bot.name)}">
+            <span class="bot-card-name">${escapeHtml(bot.name)}</span>
+            ${bot.tagline ? `<span class="bot-card-tagline">${escapeHtml(bot.tagline)}</span>` : ""}
+        </button>
+    `).join("");
+
+    grid.querySelectorAll(".bot-card").forEach(card => {
+        card.addEventListener("click", () => {
+            openBotModal(Number(card.dataset.botIndex));
+        });
+    });
+}
+function openBotModal(index) {
+    const bot = botCatalog[index];
+    const modal = document.getElementById("botModal");
+    const modalBody = document.getElementById("botModalBody");
+
+    if (!bot || !modal || !modalBody) {
+        return;
+    }
+
+    modalBody.innerHTML = buildBotModal(bot);
+    modal.dataset.botIndex = String(index);
+    activeSection = null;
+    modal.hidden = false;
+    document.body.classList.add("modal-open");
+}
+function closeBotModal() {
+    const modal = document.getElementById("botModal");
+    const modalBody = document.getElementById("botModalBody");
+
+    if (!modal || modal.hidden) {
+        return;
+    }
+
+    modal.hidden = true;
+    document.body.classList.remove("modal-open");
+
+    if (modalBody) {
+        modalBody.innerHTML = "";
+    }
+
+    delete modal.dataset.botIndex;
+    activeSection = null;
+}
+function resetBotSystems() {
+    const systemsShell = document.getElementById("bot-systems");
+    const groups = document.querySelectorAll(".bot-systems-group");
+
+    showAllGames();
+    document.querySelectorAll("#bot-systems-roles .weekday").forEach(section => {
+        section.classList.remove("active");
+        setExpandableHeight(section.querySelector(".day-events"), false);
+    });
+
+    if (systemsShell) {
+        systemsShell.hidden = true;
+    }
+
+    groups.forEach(group => {
+        group.hidden = true;
+        group.classList.remove("is-revealed");
+    });
+}
+function expandRoleSystems() {
+    document.querySelectorAll("#bot-systems-roles .weekday")
+        .forEach(section => {
+            section.classList.add("active");
+            setExpandableHeight(section.querySelector(".day-events"), true);
+        });
+}
+function scrollToBotSystem(system, game) {
+    if (system === "games" && game === "events-archive") {
+        openEventsArchive();
+        return;
+    }
+
+    const targetMap = {
+        roles: "bot-systems-roles",
+        buffs: "bot-systems-buffs",
+        games: "bot-systems-games"
+    };
+    const targetId = targetMap[system] || targetMap.roles;
+    const rolesTab = document.getElementById("roles");
+    const systemsShell = document.getElementById("bot-systems");
+    const targetGroup = document.getElementById(targetId);
+
+    closeBotModal();
+
+    const scrollToTarget = () => {
+        if (!systemsShell || !targetGroup) {
+            return;
+        }
+
+        systemsShell.hidden = false;
+        targetGroup.hidden = false;
+        targetGroup.classList.remove("is-revealed");
+        void targetGroup.offsetWidth;
+        targetGroup.classList.add("is-revealed");
+
+        if (system === "roles") {
+            expandRoleSystems();
+        }
+
+        if (system === "games") {
+            if (game && showOnlyGame(game)) {
+                return;
+            }
+
+            showAllGames();
+        }
+
+        const target = targetGroup;
+        const top = target.getBoundingClientRect().top + window.scrollY - 92;
+
+        window.scrollTo({
+            top,
+            behavior: "smooth"
+        });
+    };
+
+    //if (!rolesTab || !rolesTab.classList.contains("active")) {
+    //    openTab("roles");
+    //    window.setTimeout(scrollToTarget, 220);
+    //    return;
+    //}
+
+    //if (systemsShell.hidden) {
+    //    window.setTimeout(scrollToTarget, 60);
+    //    return;
+    //}
+
+    scrollToTarget();
+}
+function setupBotModal() {
+    const modal = document.getElementById("botModal");
+
+    if (!modal || modal.dataset.ready === "true") {
+        return;
+    }
+
+    modal.addEventListener("click", event => {
+        if (event.target.closest("[data-close-modal]") || event.target.closest(".bot-modal-close")) {
+            closeBotModal();
+            return;
+        }
+
+        const gameCard = event.target.closest(".bot-game-card[data-game]");
+
+        if (gameCard) {
+            scrollToBotSystem("games", gameCard.dataset.game);
+            return;
+        }
+
+        const deepButton = event.target.closest("[data-deep-section]");
+
+        if (deepButton) {
+            toggleBotDeepSection(deepButton.dataset.deepSection);
+            return;
+        }
+
+        const systemButton = event.target.closest("[data-system-target]");
+
+        if (systemButton) {
+            scrollToBotSystem(systemButton.dataset.systemTarget);
+        }
+    });
+
+    modal.dataset.ready = "true";
+}
