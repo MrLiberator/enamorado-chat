@@ -35,17 +35,25 @@ function setExpandableHeight(content, isOpen) {
 
     content.style.maxHeight = isOpen ? `${content.scrollHeight}px` : "0px";
 }
+function isRoleSection(section) {
+    return !!section?.closest("#bot-systems-roles");
+}
+function syncExpandablePanelsSoon() {
+    window.requestAnimationFrame(() => {
+        syncExpandablePanels();
+    });
+}
 function syncExpandablePanels() {
     document.querySelectorAll(".weekday").forEach(section => {
+        if (isRoleSection(section)) {
+            return;
+        }
+
         setExpandableHeight(section.querySelector(".day-events"), section.classList.contains("active"));
     });
 
     document.querySelectorAll(".event").forEach(card => {
         setExpandableHeight(card.querySelector(".description"), card.classList.contains("active"));
-    });
-
-    document.querySelectorAll(".role").forEach(card => {
-        setExpandableHeight(card.querySelector(".role-description"), card.classList.contains("active"));
     });
 
     document.querySelectorAll(".game-doc-card").forEach(card => {
@@ -57,23 +65,40 @@ const toggleDay = el => {
     const isOpen = !section.classList.contains("active");
 
     section.classList.toggle("active", isOpen);
-    setExpandableHeight(section.querySelector(".day-events"), isOpen);
+
+    if (!isRoleSection(section)) {
+        setExpandableHeight(section.querySelector(".day-events"), isOpen);
+    }
+
+    syncExpandablePanelsSoon();
 };
 const toggleEvent = el => {
     const isOpen = !el.classList.contains("active");
 
     el.classList.toggle("active", isOpen);
     setExpandableHeight(el.querySelector(".description"), isOpen);
+    syncExpandablePanelsSoon();
 };
 const toggleRule = el => {
     el.classList.toggle("active");
 };
-const toggleRole = el => {
-    const isOpen = !el.classList.contains("active");
+function toggleRole(header) {
+    const role = header.closest(".role");
 
-    el.classList.toggle("active", isOpen);
-    setExpandableHeight(el.querySelector(".role-description"), isOpen);
-};
+    if (!role) {
+        return;
+    }
+
+    const isActive = role.classList.contains("active");
+
+    document.querySelectorAll(".role.active").forEach(card => {
+        card.classList.remove("active");
+    });
+
+    if (!isActive) {
+        role.classList.add("active");
+    }
+}
 function getGameCards() {
     return document.querySelectorAll("#games-content .game-doc-card");
 }
@@ -1478,7 +1503,6 @@ function resetBotSystems() {
     showAllGames();
     document.querySelectorAll("#bot-systems-roles .weekday").forEach(section => {
         section.classList.remove("active");
-        setExpandableHeight(section.querySelector(".day-events"), false);
     });
 
     if (systemsShell) {
@@ -1494,7 +1518,6 @@ function expandRoleSystems() {
     document.querySelectorAll("#bot-systems-roles .weekday")
         .forEach(section => {
             section.classList.add("active");
-            setExpandableHeight(section.querySelector(".day-events"), true);
         });
 }
 function scrollToBotSystem(system, game) {

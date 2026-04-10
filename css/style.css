@@ -144,8 +144,7 @@ h1 {
 }
 
 .description,
-.rule-text,
-.role-description {
+.rule-text {
     max-height: 0;
     opacity: 0;
     overflow: hidden;
@@ -168,10 +167,6 @@ h1 {
 
 .rule.active .rule-text {
     max-height: 300px;
-    opacity: 1;
-}
-
-.role.active .role-description {
     opacity: 1;
 }
 
@@ -212,9 +207,21 @@ h1 {
 
 .roles-container .day-events {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
     margin-top: 16px;
+    align-items: start;
+}
+
+#bot-systems-roles .weekday .day-events {
+    display: none;
+    max-height: none;
+    overflow: visible;
+    transition: none;
+}
+
+#bot-systems-roles .weekday.active .day-events {
+    display: grid;
 }
 
 .roles-container .role,
@@ -230,11 +237,18 @@ h1 {
     --role-accent: #8ea2c5;
     --role-glow: rgba(142,162,197,.18);
     position: relative;
+    z-index: 1;
+    cursor: pointer;
     margin-top: 0;
     padding: 16px;
     border-radius: var(--radius-2xl);
     overflow: hidden;
-    transition: transform var(--transition-card), border-color var(--transition-card), box-shadow var(--transition-card);
+    align-self: start;
+    transition: border-color var(--transition-card), box-shadow var(--transition-card);
+}
+
+.roles-container .role-card-top {
+    cursor: pointer;
 }
 
 .roles-container .role::before {
@@ -249,12 +263,12 @@ h1 {
 
 .roles-container .weekday .role:hover,
 .events-container .event:hover {
-    transform: translateY(-4px);
     border-color: rgba(255,255,255,.15);
     box-shadow: 0 18px 38px rgba(0,0,0,.25);
 }
 
 .roles-container .weekday .role.active {
+    z-index: 5;
     border-color: var(--role-accent);
     box-shadow: 0 18px 42px rgba(0,0,0,.3), 0 0 22px var(--role-glow);
 }
@@ -352,30 +366,26 @@ h1 {
     color: #fff;
     font-size: 16px;
     flex-shrink: 0;
-    transition: transform var(--transition-card), background var(--transition-card);
+    transition: background var(--transition-card);
 }
 
 .roles-container .weekday .role.active .role-toggle {
-    transform: rotate(180deg);
     background: var(--role-glow);
 }
 
 .roles-container .role-description {
-    display: grid;
+    display: none;
+    max-height: none;
     gap: 12px;
-    max-height: 0;
-    margin-top: 0;
+    margin-top: 10px;
     padding-top: 0;
-    opacity: 0;
-    overflow: hidden;
+    opacity: 1;
+    overflow: visible;
     white-space: normal;
-    transition: max-height .35s ease, opacity var(--transition-card), margin var(--transition-card), padding var(--transition-card);
 }
 
 .roles-container .role.active .role-description {
-    margin-top: 14px;
-    padding-top: 4px;
-    opacity: 1;
+    display: block;
 }
 
 .role-section {
@@ -1458,6 +1468,27 @@ body.modal-open {
     .chat-rule-card,
     .chat-rule-note {
         padding: 14px;
+    }
+
+    .roles-container .role-description {
+        gap: 10px;
+    }
+
+    .roles-container .role-section {
+        padding: 12px;
+    }
+
+    .roles-container .role-title-row {
+        gap: 6px;
+    }
+
+    .roles-container .role-header {
+        font-size: 17px;
+    }
+
+    .roles-container .role-meta {
+        margin-top: 8px;
+        gap: 6px;
     }
 
     .navbar {
