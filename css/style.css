@@ -831,6 +831,7 @@ h1 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 14px;
+    align-items: start;
 }
 
 .events-container .event {
@@ -841,6 +842,10 @@ h1 {
     overflow: hidden;
     cursor: pointer;
     transition: transform var(--transition-card), border-color var(--transition-card), box-shadow var(--transition-card);
+}
+
+.events-container .event-card-top {
+    cursor: pointer;
 }
 
 .events-container .event::before {
@@ -854,6 +859,7 @@ h1 {
 }
 
 .events-container .event.active {
+    grid-column: 1 / -1;
     border-color: rgba(255,116,130,.55);
     box-shadow: 0 18px 42px rgba(0,0,0,.3), 0 0 22px rgba(255,116,130,.12);
 }
@@ -880,7 +886,8 @@ h1 {
 }
 
 .events-container .description {
-    max-height: 0;
+    display: none;
+    max-height: none;
     margin-top: 0;
     padding: 0;
     border: 0;
@@ -889,17 +896,17 @@ h1 {
     color: #e9eef7;
     line-height: 1.55;
     white-space: pre-line;
-    opacity: 0;
-    overflow: hidden;
-    transition: max-height .35s ease, opacity var(--transition-card), margin var(--transition-card), padding var(--transition-card), border-color var(--transition-card), background var(--transition-card);
+    opacity: 1;
+    overflow: visible;
+    transition: margin var(--transition-card), padding var(--transition-card), border-color var(--transition-card), background var(--transition-card);
 }
 
 .events-container .event.active .description {
+    display: block;
     margin-top: 14px;
     padding: 14px;
     border: 1px solid rgba(255,255,255,.06);
     background: rgba(255,255,255,.03);
-    opacity: 1;
 }
 
 /* Chat rules */
