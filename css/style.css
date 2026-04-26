@@ -288,6 +288,11 @@ h1 {
     --role-glow: rgba(255,216,107,.18);
 }
 
+.roles-container .role-seasonal {
+    --role-accent: #b48bff;
+    --role-glow: rgba(180,139,255,.18);
+}
+
 .role-card-top,
 .event-card-top {
     display: flex;
@@ -336,6 +341,26 @@ h1 {
 
 .neutral-badge {
     color: #ffe08b;
+}
+
+.seasonal-badge {
+    color: #d7c1ff;
+}
+
+.role-subheading {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: var(--radius-xl);
+    background: rgba(180,139,255,.09);
+    border: 1px solid rgba(180,139,255,.2);
+    color: #f3ecff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
 }
 
 .role-meta {
